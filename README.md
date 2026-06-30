@@ -7,6 +7,7 @@ Laravel 13 project.
 - PHP 8.4 or newer
 - Composer
 - Node.js and npm
+- MySQL or MariaDB
 
 ## Setup
 
@@ -16,15 +17,28 @@ Run these commands after cloning the repository:
 composer run setup
 ```
 
-This installs PHP dependencies, creates `.env`, generates `APP_KEY`, creates the local SQLite database file, runs migrations, installs npm dependencies, and builds Vite assets.
+This installs PHP dependencies, creates `.env`, generates `APP_KEY`, creates the MySQL database from the `.env` settings when it does not exist yet, runs migrations, installs npm dependencies, and builds Vite assets.
 
-If you prefer to run the steps manually:
+The default database settings are:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=examen_dag1
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+If your MySQL username or password is different, update `.env` before running migrations.
+
+Manual setup:
 
 ```bash
 composer install
 cp .env.example .env
 php artisan key:generate
-php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"
+php scripts/create_mysql_database.php
 php artisan migrate
 npm install
 npm run build
@@ -35,5 +49,3 @@ Start the app:
 ```bash
 php artisan serve
 ```
-
-The default database is SQLite, so `php artisan migrate` works without creating a MySQL database first. To use MySQL, copy the commented MySQL settings from `.env.example` into `.env` and create the database locally.
