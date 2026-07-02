@@ -1,13 +1,12 @@
 <nav class="border-b border-gray-400 bg-white">
     <div class="flex h-[76px] items-center justify-between px-7">
         <div class="flex items-center gap-4">
-            <!-- Wireframe-logo: eenvoudig kader met kruis zoals in het ontwerp. -->
-            <a href="{{ route('dashboard') }}" class="flex items-center gap-4">
-                <span class="relative block h-10 w-10 border border-black">
-                    <span class="absolute left-0 top-1/2 h-px w-full -rotate-45 bg-black"></span>
-                    <span class="absolute left-0 top-1/2 h-px w-full rotate-45 bg-black"></span>
+            <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
+                <img src="{{ asset('images/kniploket-tiko-logo.png') }}" alt="Kniploket Tiko" class="h-14 w-14 object-contain">
+                <span class="text-2xl font-bold">
+                    <span class="text-[#10213D]">knip</span><span class="text-[#C6983C]">loket</span>
+                    <span class="ml-1 text-[#10213D]">tiko</span>
                 </span>
-                <span class="text-2xl font-bold">Kniploket Tiko</span>
             </a>
         </div>
 
