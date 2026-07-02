@@ -68,7 +68,11 @@
                             <tr class="bg-white">
                                 <td class="px-4 py-3">
                                     <div class="flex items-center gap-4">
-                                        @include('behandelingen.partials.service-icon', ['type' => $behandeling->type])
+                                        @if ($behandeling->afbeelding_pad)
+                                            <img src="{{ asset('storage/'.$behandeling->afbeelding_pad) }}" alt="{{ $behandeling->naam }}" class="h-12 w-12 rounded-md object-cover">
+                                        @else
+                                            @include('behandelingen.partials.service-icon', ['type' => $behandeling->type])
+                                        @endif
                                         <div>
                                             <div class="font-bold">{{ $behandeling->naam }}</div>
                                             <div class="mt-1 max-w-xs truncate text-sm">{{ $behandeling->beschrijving ?: 'Geen beschrijving beschikbaar.' }}</div>

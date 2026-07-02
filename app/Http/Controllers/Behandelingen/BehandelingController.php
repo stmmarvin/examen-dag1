@@ -9,6 +9,7 @@ use App\Models\Behandelingen\Behandeling;
 use App\Support\Behandelingen\BehandelingKeuzes;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class BehandelingController extends Controller
@@ -60,7 +61,13 @@ class BehandelingController extends Controller
     public function store(StoreBehandelingRequest $request): RedirectResponse
     {
         // Slaat een nieuwe behandeling op na validatie.
-        $behandeling = Behandeling::create($request->validated());
+        $gegevens = $request->safe()->except('afbeelding');
+
+        if ($request->hasFile('afbeelding')) {
+            $gegevens['afbeelding_pad'] = $request->file('afbeelding')->store('behandelingen', 'public');
+        }
+
+        $behandeling = Behandeling::create($gegevens);
 
         return redirect()
             ->route('behandelingen.show', $behandeling)
@@ -96,7 +103,17 @@ class BehandelingController extends Controller
     public function update(UpdateBehandelingRequest $request, Behandeling $behandeling): RedirectResponse
     {
         // Werkt een bestaande behandeling bij.
-        $behandeling->update($request->validated());
+        $gegevens = $request->safe()->except('afbeelding');
+
+        if ($request->hasFile('afbeelding')) {
+            if ($behandeling->afbeelding_pad) {
+                Storage::disk('public')->delete($behandeling->afbeelding_pad);
+            }
+
+            $gegevens['afbeelding_pad'] = $request->file('afbeelding')->store('behandelingen', 'public');
+        }
+
+        $behandeling->update($gegevens);
 
         return redirect()
             ->route('behandelingen.show', $behandeling)
@@ -106,6 +123,10 @@ class BehandelingController extends Controller
     public function destroy(Behandeling $behandeling): RedirectResponse
     {
         // Verwijdert de gekozen behandeling.
+        if ($behandeling->afbeelding_pad) {
+            Storage::disk('public')->delete($behandeling->afbeelding_pad);
+        }
+
         $behandeling->delete();
 
         return redirect()

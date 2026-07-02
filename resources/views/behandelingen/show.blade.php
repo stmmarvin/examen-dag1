@@ -19,6 +19,10 @@
     @endif
 
     <section class="mt-8 rounded-xl border border-slate-200 bg-white shadow-sm p-6">
+        @if ($behandeling->afbeelding_pad)
+            <img src="{{ asset('storage/'.$behandeling->afbeelding_pad) }}" alt="{{ $behandeling->naam }}" class="mb-8 h-80 w-full rounded-lg object-cover">
+        @endif
+
         <div class="flex items-center justify-between gap-6">
             <div class="flex items-center gap-6">
                 @include('behandelingen.partials.service-icon', ['type' => $behandeling->type])
