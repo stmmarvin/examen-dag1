@@ -24,19 +24,13 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $voornaam = fake()->firstName();
-        $achternaam = fake()->lastName();
-        
         return [
-            'name' => $voornaam . ' ' . $achternaam,
-            'voornaam' => $voornaam,
-            'achternaam' => $achternaam,
+            'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
-            'telefoon' => '06' . fake()->numerify('########'),
-            'rolename' => 'klant',
             'remember_token' => Str::random(10),
+            'rolename' => 'client', // Default role for testing
         ];
     }
 

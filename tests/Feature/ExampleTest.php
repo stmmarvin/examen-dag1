@@ -14,6 +14,7 @@ class ExampleTest extends TestCase
     {
         $response = $this->get('/');
 
-        $response->assertStatus(200);
+        // Homepage redirects to dashboard which requires auth
+        $response->assertRedirect(route('dashboard'));
     }
 }
