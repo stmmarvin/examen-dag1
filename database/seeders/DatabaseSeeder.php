@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use App\Models\Client;
 use App\Models\Employee;
 use App\Models\Treatment;
 use App\Models\Appointment;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -21,14 +21,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::query()->updateOrCreate(
-            ['email' => 'eigenaar@kniplokettiko.nl'],
-            [
-                'name' => 'Eigenaar Kniploket Tiko',
-                'password' => Hash::make('Eigenaar123!'),
-                'rolename' => 'eigenaar',
-            ],
-        );
+        $this->call(EigenaarSeeder::class);
 
         DB::table('rollen')->updateOrInsert(
             ['naam' => 'eigenaar'],
