@@ -21,15 +21,15 @@
 
                 <section class="rounded-xl border border-slate-200 bg-white shadow-sm p-5">
                     <h2 class="text-lg font-bold text-slate-950">Afbeelding</h2>
-                    <div class="mt-5 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                    <label for="afbeelding" class="mt-5 block cursor-pointer overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm hover:border-[#c69a3e]">
                         @if ($behandeling->afbeelding_pad)
                             <img id="afbeelding-preview" src="{{ asset('storage/'.$behandeling->afbeelding_pad) }}" alt="{{ $behandeling->naam }}" class="h-64 w-full object-cover">
                         @else
                             <img id="afbeelding-preview" src="" alt="" class="hidden h-64 w-full object-cover">
                             <div id="afbeelding-placeholder" class="flex h-64 items-center justify-center bg-[#f8f4ea] text-sm font-bold text-slate-600">Geen afbeelding ingesteld</div>
                         @endif
-                    </div>
-                    <input id="afbeelding" name="afbeelding" type="file" accept="image/jpeg,image/png,image/webp" class="mt-4 block w-full rounded border border-slate-300 bg-white px-3 py-2 text-sm text-slate-950 shadow-sm file:mr-4 file:rounded file:border-0 file:bg-[#0f1f3a] file:px-4 file:py-2 file:text-sm file:font-bold file:text-white">
+                    </label>
+                    <input id="afbeelding" name="afbeelding" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only">
                     <x-input-error class="mt-2" :messages="$errors->get('afbeelding')" />
                     <p class="mt-3 text-xs text-slate-600">Upload alleen als je de afbeelding wilt vervangen. Max. 5MB.</p>
 

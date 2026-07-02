@@ -27,7 +27,7 @@
                             <p class="mt-3 text-sm text-slate-600">of sleep een afbeelding hierheen</p>
                         </div>
                     </label>
-                    <input id="afbeelding" name="afbeelding" type="file" accept="image/jpeg,image/png,image/webp" class="mt-4 block w-full rounded border border-slate-300 bg-white px-3 py-2 text-sm text-slate-950 shadow-sm file:mr-4 file:rounded file:border-0 file:bg-[#0f1f3a] file:px-4 file:py-2 file:text-sm file:font-bold file:text-white">
+                    <input id="afbeelding" name="afbeelding" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only">
                     <x-input-error class="mt-2" :messages="$errors->get('afbeelding')" />
                     <p class="mt-3 text-xs text-slate-600">Aanbevolen formaat: 1200x800px. Max. 5MB. JPG, PNG of WebP.</p>
                 </section>
