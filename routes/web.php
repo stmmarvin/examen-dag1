@@ -61,6 +61,7 @@ Route::middleware(['auth'])->prefix('eigenaar')->name('eigenaar.')->group(functi
 Route::middleware(['auth'])->prefix('medewerkers')->name('medewerkers.')->group(function () {
     Route::get('/', [\App\Http\Controllers\SimpleMedewerkerController::class, 'index'])->name('index');
     Route::get('/create', [\App\Http\Controllers\SimpleMedewerkerController::class, 'create'])->name('create');
+    Route::get('/{medewerker}/delete', [\App\Http\Controllers\SimpleMedewerkerController::class, 'delete'])->name('delete');
     Route::post('/', [\App\Http\Controllers\SimpleMedewerkerController::class, 'store'])->name('store');
     Route::get('/{medewerker}/edit', [\App\Http\Controllers\SimpleMedewerkerController::class, 'edit'])->name('edit');
     Route::put('/{medewerker}', [\App\Http\Controllers\SimpleMedewerkerController::class, 'update'])->name('update');

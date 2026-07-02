@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rules;
 
 class SimpleMedewerkerController extends Controller
@@ -75,6 +77,25 @@ class SimpleMedewerkerController extends Controller
         return view('medewerkers.edit', compact('medewerker'));
     }
 
+    // Toon verwijderpagina met eigen styling
+    public function delete($medewerker)
+    {
+        $this->checkEigenaar();
+
+        $resolved = $this->resolveMedewerker($medewerker);
+
+        if (! $resolved) {
+            abort(404);
+        }
+
+        $hasAppointments = $this->heeftToekomstigeAfspraken($resolved['model'], $resolved['source']);
+
+        return view('medewerkers.delete', [
+            'medewerker' => $resolved['source'],
+            'hasAppointments' => $hasAppointments,
+        ]);
+    }
+
     // Update medewerker
     public function update(Request $request, User $medewerker)
     {
@@ -110,26 +131,71 @@ class SimpleMedewerkerController extends Controller
     }
 
     // Verwijder medewerker
-    public function destroy(User $medewerker)
+    public function destroy($medewerker)
     {
         $this->checkEigenaar();
-        
-        if ($medewerker->rolename !== 'medewerker') {
-            abort(403, 'Dit is geen medewerker account.');
+
+        $resolved = $this->resolveMedewerker($medewerker);
+
+        if (! $resolved) {
+            abort(404);
         }
-        
-        // Check if medewerker has future appointments
-        $hasAppointments = \App\Models\Appointment::where('employee_id', $medewerker->id)
-            ->where('appointment_date', '>=', now())
-            ->exists();
+
+        $hasAppointments = $this->heeftToekomstigeAfspraken($resolved['model'], $resolved['source']);
             
         if ($hasAppointments) {
             return back()->with('error', 'Deze medewerker heeft nog toekomstige afspraken en kan niet worden verwijderd.');
         }
-        
-        $medewerker->delete();
+
+        $resolved['model']->delete();
         
         return redirect()->route('medewerkers.index')
             ->with('success', 'Medewerker verwijderd!');
+    }
+
+    private function resolveMedewerker($medewerker): ?array
+    {
+        $id = is_object($medewerker) ? $medewerker->getKey() : $medewerker;
+
+        if (Schema::hasTable('medewerkers')) {
+            $medewerkerModel = \App\Models\Medewerker::find($id);
+
+            if ($medewerkerModel) {
+                return [
+                    'model' => $medewerkerModel,
+                    'source' => $medewerkerModel,
+                ];
+            }
+        }
+
+        $user = User::find($id);
+
+        if ($user) {
+            return [
+                'model' => $user,
+                'source' => $user,
+            ];
+        }
+
+        return null;
+    }
+
+    private function heeftToekomstigeAfspraken($medewerkerModel, $source): bool
+    {
+        if ($medewerkerModel instanceof \App\Models\Medewerker && Schema::hasTable('afspraken')) {
+            return DB::table('afspraken')
+                ->where('medewerker_id', $medewerkerModel->id)
+                ->where('start_datumtijd', '>=', now())
+                ->exists();
+        }
+
+        if ($source instanceof User && Schema::hasTable('appointments')) {
+            return DB::table('appointments')
+                ->where('employee_id', $source->id)
+                ->where('appointment_date', '>=', now())
+                ->exists();
+        }
+
+        return false;
     }
 }

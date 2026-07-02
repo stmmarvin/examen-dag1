@@ -1,19 +1,15 @@
 <?php
 
-namespace Database\Seeders;
-
-use Illuminate\Database\Seeder;
+use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class DatabaseSeeder extends Seeder
+return new class extends Migration
 {
-    /**
-     * Seed de voorbeelddata voor de tabellen die door de Laravel-migraties
-     * worden aangemaakt.
-     */
-    public function run(): void
+    public function up(): void
     {
-        $this->call(EigenaarSeeder::class);
+        if (app()->environment('testing')) {
+            return;
+        }
 
         $treatments = [
             ['name' => 'Knippen', 'description' => 'Knippen en afwerken', 'duration_minutes' => 45, 'price' => 32.50],
@@ -106,4 +102,43 @@ class DatabaseSeeder extends Seeder
             );
         }
     }
-}
+
+    public function down(): void
+    {
+        if (app()->environment('testing')) {
+            return;
+        }
+
+        DB::table('appointments')->whereIn('appointment_date', [
+            '2026-07-08 10:00:00',
+            '2026-07-09 09:30:00',
+            '2026-07-10 13:00:00',
+            '2026-07-11 15:00:00',
+            '2026-07-12 12:00:00',
+        ])->delete();
+
+        DB::table('clients')->whereIn('email', [
+            'sanne@example.test',
+            'nora@example.test',
+            'mila@example.test',
+            'daan@example.test',
+            'yara@example.test',
+        ])->delete();
+
+        DB::table('employees')->whereIn('email', [
+            'lisa@kniplokettiko.nl',
+            'laura@kniplokettiko.nl',
+            'mark@kniplokettiko.nl',
+            'emma@kniplokettiko.nl',
+            'tom@kniplokettiko.nl',
+        ])->delete();
+
+        DB::table('treatments')->whereIn('name', [
+            'Knippen',
+            'Kleuren',
+            'Styling',
+            'Extensions',
+            'Basic Gezichtsbehandeling',
+        ])->delete();
+    }
+};

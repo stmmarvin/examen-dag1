@@ -18,31 +18,35 @@
                 <div class="mt-6 flex min-w-0 gap-6">
                     <span class="h-20 w-20 shrink-0 rounded-full border border-black"></span>
                     <div class="min-w-0">
-                        <h3 class="break-words text-2xl font-bold">{{ $medewerker->gebruiker->volledige_naam }}</h3>
-                        <p class="mt-3 break-words text-sm">{{ $medewerker->gebruiker->telefoon }} · <span class="break-all">{{ $medewerker->gebruiker->email }}</span></p>
-                        <p class="mt-4 text-sm">
-                            In dienst sinds:
-                            {{ optional($medewerker->in_dienst_sinds)->translatedFormat('d F Y') ?? 'Onbekend' }}
-                        </p>
+                        <h3 class="break-words text-2xl font-bold">{{ $medewerker->name }}</h3>
+                        <p class="mt-3 break-words text-sm">{{ $medewerker->telefoon ?? '-' }} · <span class="break-all">{{ $medewerker->email }}</span></p>
+                        <p class="mt-4 text-sm">Rol: {{ $medewerker->rolename }}</p>
                     </div>
                 </div>
 
                 <dl class="mt-8 grid grid-cols-[140px_minmax(0,1fr)] gap-x-4 gap-y-3 text-sm">
-                    <dt class="font-bold">Functie</dt>
-                    <dd class="min-w-0 break-words">{{ $medewerker->functie }}</dd>
                     <dt class="font-bold">Status</dt>
-                    <dd class="min-w-0 break-words">{{ $medewerker->statusTekst() }}</dd>
-                    <dt class="font-bold">Specialisatie</dt>
-                    <dd class="min-w-0 break-words">{{ $medewerker->specialisatiesTekst() ?: 'Geen' }}</dd>
+                    <dd class="min-w-0 break-words">Actief</dd>
                     <dt class="font-bold">Toekomstige afspraken</dt>
-                    <dd class="min-w-0 break-words">{{ $toekomstigeAfspraken }}</dd>
+                    <dd class="min-w-0 break-words">{{ $hasAppointments ? 'Ja' : 'Nee' }}</dd>
                 </dl>
 
-                <div class="mt-7 flex gap-5 rounded border border-red-500 px-6 py-5 text-sm">
-                    <span class="flex h-7 w-7 items-center justify-center border border-red-500 font-bold text-red-600">!</span>
-                    <div>
-                        <p class="font-bold">Let op: deze actie is onomkeerbaar</p>
-                        <p class="mt-3">De medewerker wordt verwijderd uit het overzicht en kan niet meer worden ingepland.</p>
+                @if($hasAppointments)
+                    <div class="mt-7 rounded border border-orange-400 bg-orange-50 px-6 py-5 text-sm text-orange-900">
+                        Deze medewerker heeft nog toekomstige afspraken en kan daarom niet worden verwijderd.
+                    </div>
+                @endif
+
+                <div class="mt-7 rounded-2xl border border-amber-300 bg-amber-50 px-6 py-5 text-sm text-amber-950 shadow-sm">
+                    <div class="flex items-start gap-4">
+                        <span class="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-200 text-base font-bold text-amber-900">!</span>
+                        <div>
+                            <p class="text-base font-bold">Verwijderen bevestigen</p>
+                            <p class="mt-2 leading-6">Deze medewerker verdwijnt uit het overzicht en kan daarna niet meer worden ingepland.</p>
+                            @if(! $hasAppointments)
+                                <p class="mt-2 leading-6">Als je doorgaat, wordt het account direct verwijderd.</p>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -53,7 +57,7 @@
                 <a href="{{ route('medewerkers.index', ['medewerker' => $medewerker->id]) }}" class="rounded border border-gray-400 px-10 py-3 text-sm font-bold">
                     Annuleren
                 </a>
-                <button class="rounded bg-red-600 px-8 py-3 text-sm font-bold text-white">
+                <button @disabled($hasAppointments) class="rounded bg-red-600 px-8 py-3 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">
                     Medewerker verwijderen
                 </button>
             </form>

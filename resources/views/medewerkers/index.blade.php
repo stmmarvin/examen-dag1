@@ -51,14 +51,13 @@
                                            class="text-[#c69a3e] hover:text-[#0f1f3a] font-semibold">
                                             Bewerken
                                         </a>
-                                        <form method="POST" action="{{ route('medewerkers.destroy', $medewerker) }}" 
-                                              onsubmit="return confirm('Weet je zeker dat je deze medewerker wilt verwijderen?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-800 font-semibold">
-                                                Verwijderen
-                                            </button>
-                                        </form>
+                                        <button type="button"
+                                                class="font-semibold text-red-600 hover:text-red-800"
+                                                data-delete-medewerker
+                                                data-medewerker-id="{{ $medewerker->id }}"
+                                                data-medewerker-name="{{ $medewerker->name }}">
+                                            Verwijderen
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -77,6 +76,80 @@
             @endif
         </div>
     </section>
+
+    <div id="medewerker-delete-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 px-4 py-6">
+        <div class="w-full max-w-lg rounded-2xl border border-[#d7c39a] bg-white p-6 shadow-2xl">
+            <div class="flex items-start gap-4">
+                <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-amber-100 text-lg font-bold text-amber-900">!</span>
+                <div class="min-w-0">
+                    <h2 class="text-2xl font-bold text-[#0f1f3a]">Medewerker verwijderen</h2>
+                    <p class="mt-2 text-sm text-[#0f1f3a] opacity-80">
+                        Weet je zeker dat je <span id="medewerker-delete-name" class="font-semibold"></span> wilt verwijderen?
+                    </p>
+                    <p class="mt-3 text-sm text-[#0f1f3a] opacity-80">
+                        Deze actie gebeurt direct op deze pagina.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end gap-3">
+                <button type="button" id="medewerker-delete-cancel" class="rounded-md border border-[#d7c39a] px-5 py-2.5 text-sm font-semibold text-[#0f1f3a] hover:bg-[#f8f4ea]">
+                    Annuleren
+                </button>
+                <form id="medewerker-delete-form" method="POST" class="inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="rounded-md bg-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow hover:bg-red-700">
+                        Verwijderen
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (() => {
+            const modal = document.getElementById('medewerker-delete-modal');
+            const nameLabel = document.getElementById('medewerker-delete-name');
+            const form = document.getElementById('medewerker-delete-form');
+            const cancelButton = document.getElementById('medewerker-delete-cancel');
+            const deleteButtons = document.querySelectorAll('[data-delete-medewerker]');
+            const destroyBaseUrl = @json(url('/medewerkers'));
+
+            const openModal = (medewerkerId, medewerkerName) => {
+                nameLabel.textContent = medewerkerName;
+                form.action = `${destroyBaseUrl}/${medewerkerId}`;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            };
+
+            const closeModal = () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                form.action = '';
+            };
+
+            deleteButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    openModal(button.dataset.medewerkerId, button.dataset.medewerkerName);
+                });
+            });
+
+            cancelButton.addEventListener('click', closeModal);
+
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+                    closeModal();
+                }
+            });
+        })();
+    </script>
 </main>
 
 @include('behandelingen.partials.page-end')

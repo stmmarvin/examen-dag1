@@ -31,9 +31,10 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
+            'name' => ['nullable', 'string', 'min:2', 'max:255'],
             'voornaam' => ['required', 'string', 'min:2', 'max:255', 'regex:/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð\s\'-]+$/u'],
             'achternaam' => ['required', 'string', 'min:2', 'max:255', 'regex:/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð\s\'-]+$/u'],
-            'email' => ['required', 'string', 'lowercase', 'email:rfc,dns', 'max:255', 'unique:'.User::class, 'regex:/^.+@(outlook\.nl|hotmail\.(com|nl)|gmail\.com)$/i'],
+            'email' => ['required', 'string', 'lowercase', 'email:rfc,dns', 'max:255', 'unique:'.User::class],
             'telefoon' => ['nullable', 'regex:/^(06|\+316)[0-9]{8}$/'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ], [
@@ -43,11 +44,12 @@ class RegisteredUserController extends Controller
             'achternaam.min' => 'Achternaam moet minimaal 2 letters zijn.',
             'telefoon.regex' => 'Telefoonnummer moet een Nederlands nummer zijn (06... of +316...).',
             'email.email' => 'Voer een geldig e-mailadres in.',
-            'email.regex' => 'Email moet eindigen op @outlook.nl, @hotmail.com, @hotmail.nl of @gmail.com',
         ]);
 
+        $name = $request->name ?: trim($request->voornaam . ' ' . $request->achternaam);
+
         $user = User::create([
-            'name' => $request->voornaam . ' ' . $request->achternaam,
+            'name' => $name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'voornaam' => $request->voornaam,
@@ -60,6 +62,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('profiel.index');
+        return redirect()->route('dashboard');
     }
 }

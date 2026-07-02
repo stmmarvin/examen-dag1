@@ -247,6 +247,7 @@ INSERT INTO rollen (naam, omschrijving) VALUES
 INSERT INTO gebruikers (
     rol_id, voornaam, achternaam, email, telefoon, wachtwoord, actief
 ) VALUES
+(1, 'Eigenaar', 'Kniploket', 'Eigenaar123!?@gmail.com', NULL, '$2y$12$bcVdb.CEICnkUoWtGb1fDOHBE3DD8g8memRlcY9mQea8/OHQyvx8y', 1),
 (1, 'Lisa', 'Jansen', 'lisa@kniplokettiko.nl', '06 12345678', '$2y$12$voorbeeldhashhier', 1),
 (2, 'Laura', 'Jansen', 'laura@kniplokettiko.nl', '06 23456789', '$2y$12$voorbeeldhashhier', 1),
 (2, 'Mark', 'van Dijk', 'mark@kniplokettiko.nl', '06 34567890', '$2y$12$voorbeeldhashhier', 1),
@@ -261,11 +262,11 @@ INSERT INTO gebruikers (
 INSERT INTO medewerkers (
     gebruiker_id, personeelsnummer, functie, in_dienst_sinds, werkdagen, werktijden
 ) VALUES
-(1, 'MW-001', 'Manager', '2021-01-10', 'Maandag t/m vrijdag', '09:00 - 17:00'),
-(2, 'MW-002', 'Kapster', '2022-03-01', 'Maandag t/m donderdag', '09:00 - 17:00'),
-(3, 'MW-003', 'Colorist', '2023-04-15', 'Dinsdag t/m zaterdag', '10:00 - 18:00'),
-(4, 'MW-004', 'Stylist', '2024-02-20', 'Maandag, woensdag, vrijdag', '09:00 - 16:00'),
-(5, 'MW-005', 'Extensions specialist', '2024-09-01', 'Woensdag t/m zaterdag', '10:00 - 18:00');
+(2, 'MW-001', 'Manager', '2021-01-10', 'Maandag t/m vrijdag', '09:00 - 17:00'),
+(3, 'MW-002', 'Kapster', '2022-03-01', 'Maandag t/m donderdag', '09:00 - 17:00'),
+(4, 'MW-003', 'Colorist', '2023-04-15', 'Dinsdag t/m zaterdag', '10:00 - 18:00'),
+(5, 'MW-004', 'Stylist', '2024-02-20', 'Maandag, woensdag, vrijdag', '09:00 - 16:00'),
+(6, 'MW-005', 'Extensions specialist', '2024-09-01', 'Woensdag t/m zaterdag', '10:00 - 18:00');
 
 INSERT INTO klanten (
     gebruiker_id, geboortedatum, adresregel1, postcode, plaats, land, algemene_notities
@@ -334,11 +335,11 @@ INSERT INTO afspraken (
     totaalprijs,
     aangemaakt_door_gebruiker_id
 ) VALUES
-(1, 1, '2026-07-08 10:00:00', '2026-07-08 11:00:00', 'gepland', 'Eerste afspraak', 'Gebruik parfumvrije producten', 32.50, 6),
-(2, 2, '2026-07-09 09:30:00', '2026-07-09 10:15:00', 'bevestigd', 'Punten knippen', NULL, 32.50, 7),
-(3, 3, '2026-07-10 13:00:00', '2026-07-10 14:30:00', 'gepland', 'Uitgroei bijwerken', NULL, 68.00, 8),
-(4, 4, '2026-07-11 15:00:00', '2026-07-11 15:45:00', 'gepland', 'Styling voor feest', NULL, 29.95, 9),
-(5, 5, '2026-07-12 12:00:00', '2026-07-12 14:00:00', 'gepland', 'Extensions intake', NULL, 110.00, 10);
+(1, 1, '2026-07-08 10:00:00', '2026-07-08 11:00:00', 'gepland', 'Eerste afspraak', 'Gebruik parfumvrije producten', 32.50, 7),
+(2, 2, '2026-07-09 09:30:00', '2026-07-09 10:15:00', 'bevestigd', 'Punten knippen', NULL, 32.50, 8),
+(3, 3, '2026-07-10 13:00:00', '2026-07-10 14:30:00', 'gepland', 'Uitgroei bijwerken', NULL, 68.00, 9),
+(4, 4, '2026-07-11 15:00:00', '2026-07-11 15:45:00', 'gepland', 'Styling voor feest', NULL, 29.95, 10),
+(5, 5, '2026-07-12 12:00:00', '2026-07-12 14:00:00', 'gepland', 'Extensions intake', NULL, 110.00, 11);
 
 INSERT INTO afspraak_behandeling (
     afspraak_id,
