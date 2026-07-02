@@ -8,7 +8,7 @@
         <select id="behandeling_keuze" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
             <option value="">Zelf invullen</option>
             @foreach ($behandelingKeuzes as $index => $keuze)
-                <option value="{{ $index }}">{{ $keuze['naam'] }} - {{ $keuze['type'] }} (€ {{ number_format((float) $keuze['prijs'], 2, ',', '.') }})</option>
+                <option value="{{ $index }}">{{ $keuze['naam'] }} - {{ $keuze['type'] }} (&euro; {{ number_format((float) $keuze['prijs'], 2, ',', '.') }})</option>
             @endforeach
         </select>
     </div>

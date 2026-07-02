@@ -9,8 +9,13 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
+    <div class="min-h-screen bg-stone-100 py-12" style="background-image: linear-gradient(135deg, rgba(120, 53, 15, 0.08), rgba(255, 255, 255, 0.35)), repeating-linear-gradient(45deg, rgba(68, 64, 60, 0.05) 0, rgba(68, 64, 60, 0.05) 1px, transparent 1px, transparent 18px);">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="mb-6 rounded-lg bg-stone-900 px-6 py-5 text-white shadow-md">
+                <p class="text-sm font-medium uppercase tracking-widest text-amber-200">Kniploket Tiko</p>
+                <p class="mt-1 text-sm text-stone-200">Beheer hier de behandelingen van de kapperszaak.</p>
+            </div>
+
             @if (session('status'))
                 <div class="mb-4 rounded-md bg-green-50 p-4 text-sm text-green-800">{{ session('status') }}</div>
             @endif
@@ -19,9 +24,9 @@
                 <div class="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-800">{{ session('error') }}</div>
             @endif
 
-            <div class="bg-white p-6 shadow-sm sm:rounded-lg">
+            <div class="bg-white/95 p-6 shadow-md ring-1 ring-stone-200 sm:rounded-lg">
                 {{-- Zoek en filter formulier. --}}
-                <form method="GET" action="{{ route('behandelingen.index') }}" class="grid gap-4 md:grid-cols-[1fr_220px_auto]">
+                <form method="GET" action="{{ route('behandelingen.index') }}" class="grid gap-4 rounded-md bg-amber-50/70 p-4 ring-1 ring-amber-100 md:grid-cols-[1fr_220px_auto]">
                     <div>
                         <x-input-label for="zoek" value="Zoeken" />
                         <x-text-input id="zoek" name="zoek" type="search" class="mt-1 block w-full" :value="$zoekterm" placeholder="Zoek op naam, type of beschrijving" />
@@ -63,7 +68,7 @@
                                         <td class="whitespace-nowrap px-4 py-3 text-sm font-medium text-gray-900">{{ $behandeling->naam }}</td>
                                         <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-700">{{ $behandeling->type }}</td>
                                         <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-700">{{ $behandeling->duur_minuten }} min</td>
-                                        <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-700">€ {{ number_format((float) $behandeling->prijs, 2, ',', '.') }}</td>
+                                        <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-700">&euro; {{ number_format((float) $behandeling->prijs, 2, ',', '.') }}</td>
                                         <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-700">{{ $behandeling->actief ? 'Actief' : 'Inactief' }}</td>
                                         <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
                                             <a href="{{ route('behandelingen.show', $behandeling) }}" class="text-indigo-600 hover:text-indigo-900">Bekijken</a>
