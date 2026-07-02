@@ -55,39 +55,39 @@ This implementation plan breaks down the Laravel 13 CRUD application for custome
     - Test same validation scenarios as StoreKlantRequest
     - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6_
 
-- [ ] 3. Implement KlantController CRUD operations
-  - [-] 3.1 Create KlantController with index method
+- [x] 3. Implement KlantController CRUD operations
+  - [x] 3.1 Create KlantController with index method
     - Implement index method to retrieve all klanten from database
     - Return index view with klanten collection
     - _Requirements: 3.1, 3.2, 4.1, 4.2, 4.3_
   
-  - [-] 3.2 Implement create method
+  - [x] 3.2 Implement create method
     - Return create view with empty form
     - _Requirements: 1.4_
   
-  - [ ] 3.3 Implement store method
+  - [x] 3.3 Implement store method
     - Accept StoreKlantRequest for validation
     - Create new Klant with validated data
     - Redirect to index with success message
     - _Requirements: 1.1, 1.2, 1.3, 1.5, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6_
   
-  - [ ] 3.4 Implement show method
+  - [x] 3.4 Implement show method
     - Use route model binding for automatic Klant retrieval
     - Return show view with klant details
     - _Requirements: 3.3_
   
-  - [ ] 3.5 Implement edit method
+  - [x] 3.5 Implement edit method
     - Use route model binding for automatic Klant retrieval
     - Return edit view with pre-filled klant data
     - _Requirements: 5.1, 5.5_
   
-  - [ ] 3.6 Implement update method
+  - [x] 3.6 Implement update method
     - Accept UpdateKlantRequest for validation
     - Update existing Klant with validated data
     - Redirect to show or index with success message
     - _Requirements: 5.2, 5.3, 5.4, 5.5, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6_
   
-  - [ ] 3.7 Implement destroy method
+  - [x] 3.7 Implement destroy method
     - Use route model binding for automatic Klant retrieval
     - Delete klant from database
     - Redirect to index with success message
@@ -95,7 +95,7 @@ This implementation plan breaks down the Laravel 13 CRUD application for custome
     - _Requirements: 7.2, 7.3, 8.1, 8.2, 8.3_
 
 - [ ] 4. Define routes with authentication middleware
-  - [ ] 4.1 Register klanten resource routes in web.php
+  - [-] 4.1 Register klanten resource routes in web.php
     - Define RESTful routes for KlantController
     - Apply auth middleware to all klanten routes
     - _Requirements: 9.1, 9.2, 9.3_
