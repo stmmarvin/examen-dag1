@@ -21,7 +21,6 @@ class StoreBehandelingRequest extends FormRequest
             'duur_minuten' => ['required', 'integer', 'min:1', 'max:1440'],
             'prijs' => ['required', 'numeric', 'min:0', 'max:9999.99'],
             'beschrijving' => ['nullable', 'string', 'max:2000'],
-            'aanvullende_informatie' => ['nullable', 'string', 'max:2000'],
             'actief' => ['nullable', 'boolean'],
         ];
     }

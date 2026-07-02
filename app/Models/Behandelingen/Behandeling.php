@@ -19,7 +19,6 @@ class Behandeling extends Model
         'duur_minuten',
         'prijs',
         'beschrijving',
-        'aanvullende_informatie',
         'actief',
     ];
 

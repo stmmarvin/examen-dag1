@@ -8,7 +8,7 @@
         <select id="behandeling_keuze" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
             <option value="">Zelf invullen</option>
             @foreach ($behandelingKeuzes as $index => $keuze)
-                <option value="{{ $index }}">{{ $keuze['naam'] }} - {{ $keuze['type'] }} (€ {{ number_format((float) $keuze['prijs'], 2, ',', '.') }})</option>
+                <option value="{{ $index }}">{{ $keuze['naam'] }} - {{ $keuze['type'] }} (&euro; {{ number_format((float) $keuze['prijs'], 2, ',', '.') }})</option>
             @endforeach
         </select>
     </div>
@@ -43,12 +43,6 @@
         <x-input-error class="mt-2" :messages="$errors->get('beschrijving')" />
     </div>
 
-    <div class="md:col-span-2">
-        <x-input-label for="aanvullende_informatie" value="Aanvullende informatie" />
-        <textarea id="aanvullende_informatie" name="aanvullende_informatie" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">{{ old('aanvullende_informatie', $behandeling->aanvullende_informatie) }}</textarea>
-        <x-input-error class="mt-2" :messages="$errors->get('aanvullende_informatie')" />
-    </div>
-
     <label class="flex items-center gap-2 md:col-span-2">
         <input type="checkbox" name="actief" value="1" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" @checked(old('actief', $behandeling->actief))>
         <span class="text-sm text-gray-700">Actief zichtbaar maken</span>
@@ -73,7 +67,6 @@
             duur_minuten: document.getElementById('duur_minuten'),
             prijs: document.getElementById('prijs'),
             beschrijving: document.getElementById('beschrijving'),
-            aanvullende_informatie: document.getElementById('aanvullende_informatie'),
         };
 
         keuzeSelect.addEventListener('change', () => {

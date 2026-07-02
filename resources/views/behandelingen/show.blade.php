@@ -32,15 +32,11 @@
                     </div>
                     <div>
                         <dt class="text-sm font-medium text-gray-500">Prijs</dt>
-                        <dd class="mt-1 text-gray-900">€ {{ number_format((float) $behandeling->prijs, 2, ',', '.') }}</dd>
+                        <dd class="mt-1 text-gray-900">&euro; {{ number_format((float) $behandeling->prijs, 2, ',', '.') }}</dd>
                     </div>
                     <div class="md:col-span-2">
                         <dt class="text-sm font-medium text-gray-500">Beschrijving</dt>
                         <dd class="mt-1 whitespace-pre-line text-gray-900">{{ $behandeling->beschrijving ?: 'Geen beschrijving beschikbaar' }}</dd>
-                    </div>
-                    <div class="md:col-span-2">
-                        <dt class="text-sm font-medium text-gray-500">Aanvullende informatie</dt>
-                        <dd class="mt-1 whitespace-pre-line text-gray-900">{{ $behandeling->aanvullende_informatie ?: 'Geen aanvullende informatie beschikbaar' }}</dd>
                     </div>
                 </dl>
 

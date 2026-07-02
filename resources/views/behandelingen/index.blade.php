@@ -63,7 +63,7 @@
                                         <td class="whitespace-nowrap px-4 py-3 text-sm font-medium text-gray-900">{{ $behandeling->naam }}</td>
                                         <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-700">{{ $behandeling->type }}</td>
                                         <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-700">{{ $behandeling->duur_minuten }} min</td>
-                                        <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-700">€ {{ number_format((float) $behandeling->prijs, 2, ',', '.') }}</td>
+                                        <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-700">&euro; {{ number_format((float) $behandeling->prijs, 2, ',', '.') }}</td>
                                         <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-700">{{ $behandeling->actief ? 'Actief' : 'Inactief' }}</td>
                                         <td class="whitespace-nowrap px-4 py-3 text-right text-sm">
                                             <a href="{{ route('behandelingen.show', $behandeling) }}" class="text-indigo-600 hover:text-indigo-900">Bekijken</a>
