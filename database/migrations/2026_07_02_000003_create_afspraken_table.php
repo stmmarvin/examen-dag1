@@ -11,6 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (Schema::hasTable('afspraken')) {
+            return;
+        }
+
         Schema::create('afspraken', function (Blueprint $table) {
             $table->id();
             $table->foreignId('medewerker_id')->constrained('medewerkers')->restrictOnDelete();

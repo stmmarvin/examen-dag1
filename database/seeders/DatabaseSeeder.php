@@ -17,12 +17,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'Eigenaar Kniploket Tiko',
-            'email' => 'eigenaar@kniplokettiko.nl',
-            'password' => Hash::make('Eigenaar123!'),
-            'rolename' => 'eigenaar',
-        ]);
+        User::query()->updateOrCreate(
+            ['email' => 'eigenaar@kniplokettiko.nl'],
+            [
+                'name' => 'Eigenaar Kniploket Tiko',
+                'password' => Hash::make('Eigenaar123!'),
+                'rolename' => 'eigenaar',
+            ],
+        );
 
         $medewerkers = [
             ['MW-001', 'Lisa', 'Jansen', '06 12345678', 'lisa@kniplokettiko.nl', 'Manager', ['Knippen', 'Kleuren'], '2021-01-10'],
@@ -33,30 +35,37 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($medewerkers as $medewerker) {
-            DB::table('medewerkers')->insert([
-                'personeelsnummer' => $medewerker[0],
-                'voornaam' => $medewerker[1],
-                'achternaam' => $medewerker[2],
-                'telefoon' => $medewerker[3],
-                'email' => $medewerker[4],
-                'functie' => $medewerker[5],
-                'specialisaties' => json_encode($medewerker[6]),
-                'status' => 'In dienst',
-                'in_dienst_sinds' => $medewerker[7],
-                'werkdagen' => 'Maandag t/m vrijdag',
-                'werktijden' => '09:00 - 17:00',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            DB::table('medewerkers')->updateOrInsert(
+                ['personeelsnummer' => $medewerker[0]],
+                [
+                    'voornaam' => $medewerker[1],
+                    'achternaam' => $medewerker[2],
+                    'telefoon' => $medewerker[3],
+                    'email' => $medewerker[4],
+                    'functie' => $medewerker[5],
+                    'specialisaties' => json_encode($medewerker[6]),
+                    'status' => 'In dienst',
+                    'in_dienst_sinds' => $medewerker[7],
+                    'werkdagen' => 'Maandag t/m vrijdag',
+                    'werktijden' => '09:00 - 17:00',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            );
         }
 
         // Alleen voor de acceptatie-eis: Lisa kan niet verwijderd worden door toekomstige planning.
-        DB::table('afspraken')->insert([
-            'medewerker_id' => 1,
-            'starttijd' => now()->addWeek(),
-            'status' => 'Gepland',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $lisaId = DB::table('medewerkers')->where('personeelsnummer', 'MW-001')->value('id');
+
+        if ($lisaId) {
+            DB::table('afspraken')->updateOrInsert(
+                ['medewerker_id' => $lisaId, 'status' => 'Gepland'],
+                [
+                    'starttijd' => now()->addWeek(),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            );
+        }
     }
 }
