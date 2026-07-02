@@ -44,3 +44,25 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 require __DIR__.'/behandelingen.php';
+
+// Eigenaar-only routes - alleen toegankelijk voor gebruikers met rolename 'eigenaar'
+Route::middleware(['auth'])->prefix('eigenaar')->name('eigenaar.')->group(function () {
+    // Check eigenaar role in de controller of met een gate
+    Route::get('/klanten', function() {
+        if (auth()->user()->rolename !== 'eigenaar') {
+            abort(403, 'Toegang geweigerd.');
+        }
+        $klanten = \App\Models\User::where('rolename', 'klant')->orderBy('name')->get();
+        return view('eigenaar.klanten', compact('klanten'));
+    })->name('klanten');
+});
+
+// Medewerkers routes (eigenaar only)
+Route::middleware(['auth'])->prefix('medewerkers')->name('medewerkers.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\SimpleMedewerkerController::class, 'index'])->name('index');
+    Route::get('/create', [\App\Http\Controllers\SimpleMedewerkerController::class, 'create'])->name('create');
+    Route::post('/', [\App\Http\Controllers\SimpleMedewerkerController::class, 'store'])->name('store');
+    Route::get('/{medewerker}/edit', [\App\Http\Controllers\SimpleMedewerkerController::class, 'edit'])->name('edit');
+    Route::put('/{medewerker}', [\App\Http\Controllers\SimpleMedewerkerController::class, 'update'])->name('update');
+    Route::delete('/{medewerker}', [\App\Http\Controllers\SimpleMedewerkerController::class, 'destroy'])->name('destroy');
+});

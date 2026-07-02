@@ -1,71 +1,106 @@
-<x-guest-layout>
-    <div class="mb-8">
-        <p class="text-sm font-bold uppercase tracking-[0.18em] text-[#C6983C]">Eigenaar login</p>
-        <h1 class="mt-3 text-3xl font-extrabold text-[#10213D]">Inloggen</h1>
-        <p class="mt-2 text-sm text-gray-600">Log in om medewerkers te beheren.</p>
-    </div>
-
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
-    <form method="POST" action="{{ route('login') }}" class="space-y-5">
-        @csrf
-
-        <label class="block text-sm font-bold text-[#10213D]" for="email">
-            E-mailadres
-            <input
-                id="email"
-                class="mt-2 block w-full rounded border-gray-400 text-sm shadow-none focus:border-[#C6983C] focus:ring-[#C6983C]"
-                type="email"
-                name="email"
-                value="{{ old('email', 'eigenaar@kniplokettiko.nl') }}"
-                required
-                autofocus
-                autocomplete="username"
-            >
-        </label>
-        <x-input-error :messages="$errors->get('email')" class="mt-2" />
-
-        <label class="block text-sm font-bold text-[#10213D]" for="password">
-            Wachtwoord
-            <input
-                id="password"
-                class="mt-2 block w-full rounded border-gray-400 text-sm shadow-none focus:border-[#C6983C] focus:ring-[#C6983C]"
-                type="password"
-                name="password"
-                required
-                autocomplete="current-password"
-            >
-        </label>
-        <x-input-error :messages="$errors->get('password')" class="mt-2" />
-
-        <div class="flex items-center justify-between">
-            <label for="remember_me" class="inline-flex items-center text-sm text-gray-700">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-400 text-[#10213D] focus:ring-[#C6983C]" name="remember">
-                <span class="ms-2">Ingelogd blijven</span>
-            </label>
-
-        <div class="flex items-center justify-between mt-4">
-            <div class="flex items-center gap-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2" style="--tw-ring-color: #B8935A;" href="{{ route('password.request') }}">
-                        {{ __('Wachtwoord vergeten?') }}
-                    </a>
-                @endif
-
-                @if (Route::has('register'))
-                    <a class="underline text-sm hover:opacity-75 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2" style="color: #B8935A; --tw-ring-color: #B8935A;" href="{{ route('register') }}">
-                        Nog geen account? Registreer
-                    </a>
-                @endif
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Inloggen - Kniploket Tiko</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-white min-h-screen">
+    <div class="min-h-screen flex">
+        <!-- Left Side - Logo -->
+        <div class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-slate-50 to-slate-100 items-center justify-center p-12">
+            <div class="text-center max-w-lg">
+                <img src="/logo.svg" alt="Kniploket Tiko" class="w-full max-w-md mx-auto" />
             </div>
-
-            <x-primary-button class="ms-3">
-                {{ __('Inloggen') }}
-            </x-primary-button>
         </div>
 
-        <button class="w-full rounded bg-[#10213D] px-5 py-3 text-sm font-bold text-white hover:bg-[#1b3158]">
-            Inloggen
-        </button>
-    </form>
-</x-guest-layout>
+        <!-- Right Side - Login Form -->
+        <div class="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
+            <div class="w-full max-w-md">
+                <!-- Mobile Logo -->
+                <div class="lg:hidden text-center mb-8">
+                    <img src="/logo.svg" alt="Kniploket Tiko" class="w-64 mx-auto" />
+                </div>
+
+                <!-- Header -->
+                <div class="mb-8">
+                    <h2 class="text-4xl font-bold text-slate-900 mb-2">Welkom terug</h2>
+                    <p class="text-slate-600">Log in op je Kniploket Tiko account</p>
+                </div>
+
+                <!-- Session Status -->
+                @if (session('status'))
+                    <div class="mb-4 text-sm font-medium text-green-600">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
+                <!-- Login Form -->
+                <form method="POST" action="{{ route('login') }}" class="space-y-5">
+                    @csrf
+
+                    <!-- Email -->
+                    <div>
+                        <label for="email" class="block text-sm font-semibold text-slate-900 mb-2">
+                            E-mailadres
+                        </label>
+                        <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus 
+                               class="w-full px-4 py-3 border-2 border-slate-200 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-slate-900 transition">
+                        @error('email')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        <label for="password" class="block text-sm font-semibold text-slate-900 mb-2">
+                            Wachtwoord
+                        </label>
+                        <input id="password" type="password" name="password" required 
+                               class="w-full px-4 py-3 border-2 border-slate-200 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-slate-900 transition">
+                        @error('password')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Remember Me -->
+                    <div class="flex items-center">
+                        <input id="remember_me" type="checkbox" name="remember" 
+                               class="w-4 h-4 text-slate-900 border-slate-300 rounded focus:ring-slate-900">
+                        <label for="remember_me" class="ml-2 block text-sm text-slate-700">
+                            Onthoud mij
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" 
+                            class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 px-6 rounded-md transition duration-200 text-lg">
+                        Inloggen
+                    </button>
+
+                    <!-- Links -->
+                    <div class="flex items-center justify-between text-sm text-slate-600 mt-6">
+                        @if (Route::has('password.request'))
+                            <a href="{{ route('password.request') }}" class="hover:text-slate-900 font-semibold">
+                                Wachtwoord vergeten?
+                            </a>
+                        @endif
+                        
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class="hover:text-slate-900 font-semibold">
+                                Nog geen account?
+                            </a>
+                        @endif
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

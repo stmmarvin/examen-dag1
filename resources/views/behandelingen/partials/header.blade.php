@@ -8,6 +8,11 @@
             <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'border-b-2 border-[#c69a3e] pb-1' : 'hover:text-[#c69a3e]' }}">Home</a>
             <a href="{{ route('behandelingen.index') }}" class="{{ request()->routeIs('behandelingen.*') ? 'border-b-2 border-[#c69a3e] pb-1' : 'hover:text-[#c69a3e]' }}">Behandelingen</a>
             <a href="{{ route('appointments.create-as-client') }}" class="{{ request()->routeIs('appointments.*') ? 'border-b-2 border-[#c69a3e] pb-1' : 'hover:text-[#c69a3e]' }}">Afspraken</a>
+            @auth
+                @if(auth()->user()->rolename === 'eigenaar')
+                    <a href="{{ route('medewerkers.index') }}" class="{{ request()->routeIs('medewerkers.*') ? 'border-b-2 border-[#c69a3e] pb-1' : 'hover:text-[#c69a3e]' }}">Medewerkers</a>
+                @endif
+            @endauth
             <a href="#" class="hover:text-[#c69a3e]">Over ons</a>
             <a href="#" class="hover:text-[#c69a3e]">Contact</a>
         </nav>

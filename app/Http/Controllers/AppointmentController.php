@@ -57,7 +57,7 @@ class AppointmentController extends Controller
 
         $appointments = $query->paginate(10);
 
-        $employees = User::where('rolename', 'medewerker')->get();
+        $employees = User::whereIn('rolename', ['medewerker', 'eigenaar'])->get();
         $clients = Client::all();
         $treatments = Behandeling::where('actief', true)->get();
 
@@ -66,8 +66,8 @@ class AppointmentController extends Controller
 
     public function createAsClient()
     {
-        // Get employees from users table with role 'medewerker' 
-        $employees = User::where('rolename', 'medewerker')->orderBy('name')->get();
+        // Get employees from users table with role 'medewerker' OR 'eigenaar'
+        $employees = User::whereIn('rolename', ['medewerker', 'eigenaar'])->orderBy('name')->get();
         
         // Get behandelingen instead of treatments
         $treatments = Behandeling::where('actief', true)->orderBy('naam')->get();
@@ -120,7 +120,7 @@ class AppointmentController extends Controller
             ->orderBy('appointment_date', 'desc')
             ->paginate(10);
             
-        $employees = User::where('rolename', 'medewerker')->get();
+        $employees = User::whereIn('rolename', ['medewerker', 'eigenaar'])->get();
         $treatments = Behandeling::where('actief', true)->get();
         
         return view('appointments.edit-as-client', compact('appointments', 'employees', 'treatments'));
@@ -129,7 +129,7 @@ class AppointmentController extends Controller
     public function create()
     {
         $clients = Client::orderBy('last_name')->get();
-        $employees = User::where('rolename', 'medewerker')->orderBy('name')->get();
+        $employees = User::whereIn('rolename', ['medewerker', 'eigenaar'])->orderBy('name')->get();
         $treatments = Behandeling::where('actief', true)->orderBy('naam')->get();
 
         return view('appointments.create', compact('clients', 'employees', 'treatments'));
@@ -181,7 +181,7 @@ class AppointmentController extends Controller
     public function edit(Appointment $appointment)
     {
         $clients = Client::orderBy('last_name')->get();
-        $employees = User::where('rolename', 'medewerker')->orderBy('name')->get();
+        $employees = User::whereIn('rolename', ['medewerker', 'eigenaar'])->orderBy('name')->get();
         $treatments = Behandeling::where('actief', true)->orderBy('naam')->get();
 
         return view('appointments.edit', compact('appointment', 'clients', 'employees', 'treatments'));
