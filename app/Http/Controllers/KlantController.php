@@ -24,10 +24,21 @@ class KlantController extends Controller
      */
     public function index(): View
     {
-        // Get all klanten with their gebruiker relationship (eager loading)
-        $klanten = Klant::with('gebruiker')->get();
-        
-        return view('klanten.index', compact('klanten'));
+        try {
+            // Get all klanten with their gebruiker relationship (eager loading)
+            $klanten = Klant::with('gebruiker')->get();
+            
+            return view('klanten.index', compact('klanten'));
+        } catch (QueryException $e) {
+            // Log the error details for debugging
+            Log::error('Failed to retrieve klanten: ' . $e->getMessage(), [
+                'exception' => $e
+            ]);
+            
+            // Return view with empty collection and error message
+            return view('klanten.index', ['klanten' => collect()])
+                ->with('error', 'Er is een fout opgetreden bij het ophalen van de klanten.');
+        }
     }
 
     /**
@@ -137,10 +148,22 @@ class KlantController extends Controller
      */
     public function show(Klant $klant): View
     {
-        // Eager load gebruiker and klantKenmerken relationships
-        $klant->load('gebruiker', 'klantKenmerken');
-        
-        return view('klanten.show', compact('klant'));
+        try {
+            // Eager load gebruiker and klantKenmerken relationships
+            $klant->load('gebruiker', 'klantKenmerken');
+            
+            return view('klanten.show', compact('klant'));
+        } catch (QueryException $e) {
+            // Log the error details for debugging
+            Log::error('Failed to retrieve klant details: ' . $e->getMessage(), [
+                'klant_id' => $klant->id,
+                'exception' => $e
+            ]);
+            
+            // Redirect to index with error message
+            return redirect()->route('klanten.index')
+                ->with('error', 'Er is een fout opgetreden bij het ophalen van de klantgegevens.');
+        }
     }
 
     /**
@@ -150,10 +173,22 @@ class KlantController extends Controller
      */
     public function edit(Klant $klant): View
     {
-        // Eager load the gebruiker and klantKenmerken relationships
-        $klant->load('gebruiker', 'klantKenmerken');
-        
-        return view('klanten.edit', compact('klant'));
+        try {
+            // Eager load the gebruiker and klantKenmerken relationships
+            $klant->load('gebruiker', 'klantKenmerken');
+            
+            return view('klanten.edit', compact('klant'));
+        } catch (QueryException $e) {
+            // Log the error details for debugging
+            Log::error('Failed to retrieve klant for editing: ' . $e->getMessage(), [
+                'klant_id' => $klant->id,
+                'exception' => $e
+            ]);
+            
+            // Redirect to index with error message
+            return redirect()->route('klanten.index')
+                ->with('error', 'Er is een fout opgetreden bij het ophalen van de klantgegevens.');
+        }
     }
 
     /**

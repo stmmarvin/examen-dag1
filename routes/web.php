@@ -18,8 +18,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     // Klanten resource routes - RESTful CRUD operations
+    // Use 'klant' as the parameter name to match controller method signature
     // Requirements: 9.1, 9.2, 9.3
-    Route::resource('klanten', KlantController::class);
+    Route::resource('klanten', KlantController::class)->parameters([
+        'klanten' => 'klant'
+    ]);
 });
 
 require __DIR__.'/auth.php';

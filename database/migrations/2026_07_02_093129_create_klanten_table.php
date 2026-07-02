@@ -13,14 +13,16 @@ return new class extends Migration
     {
         Schema::create('klanten', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('gebruiker_id')->constrained('gebruikers')->onDelete('cascade');
+            $table->string('voornaam', 255);
+            $table->string('achternaam', 255);
+            $table->string('telefoonnummer', 20);
+            $table->string('email', 255);
             $table->date('geboortedatum')->nullable();
-            $table->string('adresregel1', 255)->nullable();
-            $table->string('adresregel2', 255)->nullable();
+            $table->string('adres', 255)->nullable();
             $table->string('postcode', 10)->nullable();
-            $table->string('plaats', 255)->nullable();
-            $table->string('land', 100)->nullable();
-            $table->text('algemene_notities')->nullable();
+            $table->string('woonplaats', 255)->nullable();
+            $table->text('allergieen')->nullable();
+            $table->text('wensen')->nullable();
             $table->timestamps();
         });
     }
