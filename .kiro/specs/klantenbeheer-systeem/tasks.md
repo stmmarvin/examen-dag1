@@ -6,13 +6,13 @@ This implementation plan breaks down the Laravel 13 CRUD application for custome
 
 ## Tasks
 
-- [ ] 1. Set up database migration and model
+- [x] 1. Set up database migration and model
   - [x] 1.1 Create klanten table migration
     - Create migration file with all required fields (id, voornaam, achternaam, telefoonnummer, email, geboortedatum, adres, postcode, woonplaats, allergieen, wensen, timestamps)
     - Define field types, nullable constraints, and indexes
     - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5, 10.6_
   
-  - [-] 1.2 Create Klant Eloquent model
+  - [x] 1.2 Create Klant Eloquent model
     - Create Klant model class with fillable fields
     - Configure date casting for geboortedatum
     - Add volledige_naam accessor for full name display
@@ -30,13 +30,13 @@ This implementation plan breaks down the Laravel 13 CRUD application for custome
     - Test timestamp automatic management
     - _Requirements: 10.1, 10.5, 10.6_
 
-- [ ] 2. Create validation Form Requests
-  - [-] 2.1 Create StoreKlantRequest for new customer validation
+- [x] 2. Create validation Form Requests
+  - [x] 2.1 Create StoreKlantRequest for new customer validation
     - Define validation rules for all fields (required, email, regex for phone/postcode)
     - Add custom validation messages in Dutch
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6_
   
-  - [-] 2.2 Create UpdateKlantRequest for customer update validation
+  - [x] 2.2 Create UpdateKlantRequest for customer update validation
     - Define identical validation rules as StoreKlantRequest
     - Add custom validation messages in Dutch
     - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6_
@@ -56,12 +56,12 @@ This implementation plan breaks down the Laravel 13 CRUD application for custome
     - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6_
 
 - [ ] 3. Implement KlantController CRUD operations
-  - [ ] 3.1 Create KlantController with index method
+  - [-] 3.1 Create KlantController with index method
     - Implement index method to retrieve all klanten from database
     - Return index view with klanten collection
     - _Requirements: 3.1, 3.2, 4.1, 4.2, 4.3_
   
-  - [ ] 3.2 Implement create method
+  - [-] 3.2 Implement create method
     - Return create view with empty form
     - _Requirements: 1.4_
   
