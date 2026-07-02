@@ -1,10 +1,6 @@
 @php
-    $gebruiker = $medewerker->gebruiker ?? null;
-    $statusWaarde = old('status', isset($medewerker) ? $medewerker->statusTekst() : 'In dienst');
-    $gekozenSpecialisaties = old(
-        'specialisaties',
-        isset($medewerker) ? $medewerker->behandelingen->pluck('id')->map(fn ($id) => (string) $id)->all() : []
-    );
+    $statusWaarde = old('status', $medewerker->status ?? 'In dienst');
+    $gekozenSpecialisaties = old('specialisaties', $medewerker->specialisaties ?? []);
 @endphp
 
 <div class="rounded border border-gray-400 p-6">
@@ -15,22 +11,22 @@
         <div class="mt-5 grid grid-cols-1 gap-x-6 gap-y-4 lg:grid-cols-2">
             <label class="block text-sm font-bold">
                 Voornaam *
-                <input required name="voornaam" value="{{ old('voornaam', $gebruiker->voornaam ?? '') }}" placeholder="Bijv. Laura" class="mt-2 w-full rounded border-gray-400">
+                <input required name="voornaam" value="{{ old('voornaam', $medewerker->voornaam ?? '') }}" placeholder="Bijv. Laura" class="mt-2 w-full rounded border-gray-400">
             </label>
 
             <label class="block text-sm font-bold">
                 Achternaam *
-                <input required name="achternaam" value="{{ old('achternaam', $gebruiker->achternaam ?? '') }}" placeholder="Bijv. Jansen" class="mt-2 w-full rounded border-gray-400">
+                <input required name="achternaam" value="{{ old('achternaam', $medewerker->achternaam ?? '') }}" placeholder="Bijv. Jansen" class="mt-2 w-full rounded border-gray-400">
             </label>
 
             <label class="block text-sm font-bold">
                 Telefoonnummer *
-                <input required name="telefoon" value="{{ old('telefoon', $gebruiker->telefoon ?? '') }}" placeholder="06 12345678" class="mt-2 w-full rounded border-gray-400">
+                <input required name="telefoon" value="{{ old('telefoon', $medewerker->telefoon ?? '') }}" placeholder="06 12345678" class="mt-2 w-full rounded border-gray-400">
             </label>
 
             <label class="block text-sm font-bold">
                 E-mailadres *
-                <input required type="email" name="email" value="{{ old('email', $gebruiker->email ?? '') }}" placeholder="naam@email.nl" class="mt-2 w-full rounded border-gray-400">
+                <input required type="email" name="email" value="{{ old('email', $medewerker->email ?? '') }}" placeholder="naam@email.nl" class="mt-2 w-full rounded border-gray-400">
             </label>
         </div>
     </section>
@@ -86,8 +82,8 @@
         <div class="mt-4 space-y-2 text-sm">
             @foreach ($specialisatieOpties as $specialisatie)
                 <label class="flex items-center gap-3">
-                    <input type="checkbox" name="specialisaties[]" value="{{ $specialisatie->id }}" @checked(in_array((string) $specialisatie->id, $gekozenSpecialisaties, true)) class="rounded border-gray-400">
-                    <span>{{ $specialisatie->naam }}</span>
+                    <input type="checkbox" name="specialisaties[]" value="{{ $specialisatie }}" @checked(in_array($specialisatie, $gekozenSpecialisaties, true)) class="rounded border-gray-400">
+                    <span>{{ $specialisatie }}</span>
                 </label>
             @endforeach
         </div>

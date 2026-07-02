@@ -4,18 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreMedewerkerRequest;
 use App\Http\Requests\UpdateMedewerkerRequest;
-use App\Models\Behandeling;
-use App\Models\Gebruiker;
 use App\Models\Medewerker;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class MedewerkerController extends Controller
 {
+    private const SPECIALISATIES = ['Knippen', 'Kleuren', 'Styling', 'Extensions'];
+
     /**
      * Toon het overzicht met zoekfunctie en detailpaneel.
      */
@@ -24,19 +23,15 @@ class MedewerkerController extends Controller
         $zoekterm = $request->string('zoek')->toString();
 
         $medewerkers = Medewerker::query()
-            ->with(['gebruiker', 'behandelingen'])
             ->zoeken($zoekterm)
-            ->join('gebruikers', 'gebruikers.id', '=', 'medewerkers.gebruiker_id')
-            ->select('medewerkers.*')
-            ->orderBy('gebruikers.achternaam')
-            ->orderBy('gebruikers.voornaam')
+            ->orderBy('achternaam')
+            ->orderBy('voornaam')
             ->get();
 
         $geselecteerdeMedewerker = $medewerkers->first();
 
         if ($request->filled('medewerker')) {
-            $geselecteerdeMedewerker = Medewerker::with(['gebruiker', 'behandelingen'])
-                ->find($request->integer('medewerker'))
+            $geselecteerdeMedewerker = Medewerker::find($request->integer('medewerker'))
                 ?? $geselecteerdeMedewerker;
         }
 
@@ -53,23 +48,17 @@ class MedewerkerController extends Controller
     public function create(): View
     {
         return view('medewerkers.create', [
-            'specialisatieOpties' => $this->specialisatieOpties(),
+            'specialisatieOpties' => self::SPECIALISATIES,
         ]);
     }
 
     /**
-     * Sla de nieuwe medewerker op in een database-transactie.
+     * Sla een nieuwe medewerker op.
      */
     public function store(StoreMedewerkerRequest $request): RedirectResponse
     {
         try {
-            $medewerker = DB::transaction(function () use ($request): Medewerker {
-                $gebruiker = Gebruiker::create($this->gebruikerData($request->validated()));
-                $medewerker = Medewerker::create($this->medewerkerData($request->validated(), $gebruiker->id));
-                $medewerker->behandelingen()->sync($request->validated('specialisaties'));
-
-                return $medewerker;
-            });
+            $medewerker = Medewerker::create($this->medewerkerData($request->validated()));
 
             Log::info('Medewerker aangemaakt', ['medewerker_id' => $medewerker->id]);
 
@@ -90,26 +79,19 @@ class MedewerkerController extends Controller
      */
     public function edit(Medewerker $medewerker): View
     {
-        $medewerker->load(['gebruiker', 'behandelingen']);
-
         return view('medewerkers.edit', [
             'medewerker' => $medewerker,
-            'specialisatieOpties' => $this->specialisatieOpties(),
+            'specialisatieOpties' => self::SPECIALISATIES,
         ]);
     }
 
     /**
-     * Werk medewerker- en persoonsgegevens samen bij.
+     * Werk medewerkergegevens bij.
      */
     public function update(UpdateMedewerkerRequest $request, Medewerker $medewerker): RedirectResponse
     {
         try {
-            DB::transaction(function () use ($request, $medewerker): void {
-                $medewerker->load('gebruiker');
-                $medewerker->gebruiker->update($this->gebruikerData($request->validated(), false));
-                $medewerker->update($this->medewerkerData($request->validated(), $medewerker->gebruiker_id));
-                $medewerker->behandelingen()->sync($request->validated('specialisaties'));
-            });
+            $medewerker->update($this->medewerkerData($request->validated()));
 
             Log::info('Medewerker gewijzigd', ['medewerker_id' => $medewerker->id]);
 
@@ -133,12 +115,10 @@ class MedewerkerController extends Controller
      */
     public function delete(Medewerker $medewerker): View
     {
-        $medewerker->load(['gebruiker', 'behandelingen', 'afspraken']);
-
         return view('medewerkers.delete', [
             'medewerker' => $medewerker,
             'toekomstigeAfspraken' => $medewerker->afspraken()
-                ->where('start_datumtijd', '>=', now())
+                ->where('starttijd', '>=', now())
                 ->count(),
         ]);
     }
@@ -157,10 +137,7 @@ class MedewerkerController extends Controller
 
         try {
             DB::transaction(function () use ($medewerker): void {
-                $gebruiker = $medewerker->gebruiker;
-                $medewerker->behandelingen()->detach();
                 $medewerker->delete();
-                $gebruiker?->delete();
             });
 
             Log::warning('Medewerker verwijderd', ['medewerker_id' => $medewerker->id]);
@@ -179,69 +156,25 @@ class MedewerkerController extends Controller
     }
 
     /**
-     * Selecteer alleen de velden voor de gebruikers-tabel.
+     * Selecteer alleen de velden die bij jouw medewerkeronderdeel horen.
      *
      * @param array<string, mixed> $data
      * @return array<string, mixed>
      */
-    private function gebruikerData(array $data, bool $metWachtwoord = true): array
+    private function medewerkerData(array $data): array
     {
-        $gebruikerData = [
-            'rol_id' => $this->eigenaarRolId(),
+        return [
+            'personeelsnummer' => $data['personeelsnummer'],
             'voornaam' => $data['voornaam'],
             'achternaam' => $data['achternaam'],
             'telefoon' => $data['telefoon'],
             'email' => $data['email'],
-            'actief' => $data['status'] === 'In dienst',
-        ];
-
-        if ($metWachtwoord) {
-            // Tijdelijk wachtwoord, omdat medewerkers via deze CRUD worden geregistreerd.
-            $gebruikerData['wachtwoord'] = Hash::make('Welkom123!');
-        }
-
-        return $gebruikerData;
-    }
-
-    /**
-     * Selecteer alleen de velden voor de medewerkers-tabel.
-     *
-     * @param array<string, mixed> $data
-     * @return array<string, mixed>
-     */
-    private function medewerkerData(array $data, int $gebruikerId): array
-    {
-        return [
-            'gebruiker_id' => $gebruikerId,
-            'personeelsnummer' => $data['personeelsnummer'],
             'functie' => $data['functie'],
+            'specialisaties' => $data['specialisaties'],
+            'status' => $data['status'],
             'in_dienst_sinds' => $data['in_dienst_sinds'] ?? null,
             'werkdagen' => ($data['werkdagen'] ?? null) ?: 'Maandag t/m vrijdag',
             'werktijden' => ($data['werktijden'] ?? null) ?: '09:00 - 17:00',
         ];
-    }
-
-    /**
-     * De eigenaarrol wordt gebruikt in plaats van medewerker als beheerrol.
-     */
-    private function eigenaarRolId(): int
-    {
-        return DB::table('rollen')->updateOrInsert(
-            ['naam' => 'eigenaar'],
-            ['omschrijving' => 'Kan medewerkers beheren', 'updated_at' => now(), 'created_at' => now()]
-        )
-            ? (int) DB::table('rollen')->where('naam', 'eigenaar')->value('id')
-            : 1;
-    }
-
-    /**
-     * Haal actieve behandelingen op als specialisatie-opties voor de checkboxen.
-     */
-    private function specialisatieOpties()
-    {
-        return Behandeling::query()
-            ->where('actief', true)
-            ->orderBy('naam')
-            ->get();
     }
 }

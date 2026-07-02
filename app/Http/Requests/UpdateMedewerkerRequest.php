@@ -32,7 +32,7 @@ class UpdateMedewerkerRequest extends FormRequest
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('gebruikers', 'email')->ignore($medewerker?->gebruiker_id),
+                Rule::unique('medewerkers', 'email')->ignore($medewerker?->id),
             ],
             'personeelsnummer' => [
                 'required',
@@ -46,7 +46,7 @@ class UpdateMedewerkerRequest extends FormRequest
             'werkdagen' => ['nullable', 'string', 'max:120'],
             'werktijden' => ['nullable', 'string', 'max:40'],
             'specialisaties' => ['required', 'array', 'min:1'],
-            'specialisaties.*' => ['integer', 'exists:behandelingen,id'],
+            'specialisaties.*' => ['string', 'in:Knippen,Kleuren,Styling,Extensions'],
         ];
     }
 
