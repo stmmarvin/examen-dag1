@@ -1,11 +1,3 @@
-@php
-    $type = strtolower((string) $type);
-    $symbol = match (true) {
-        str_contains($type, 'kleur') => '♨',
-        str_contains($type, 'styling') => '⌁',
-        str_contains($type, 'baard') => '◠',
-        default => '✂',
-    };
-@endphp
+{{-- Oude icon partial verwijst naar de nieuwe nette versie. --}}
+@include('behandelingen.partials.service-icon', ['type' => $type ?? ''])
 
-<span class="flex h-12 w-12 items-center justify-center rounded bg-gray-200 text-2xl text-black">{{ $symbol }}</span>

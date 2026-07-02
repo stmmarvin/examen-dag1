@@ -7,6 +7,6 @@
         <title>{{ config('app.name', 'Laravel') }} - Behandelingen</title>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="bg-white font-sans antialiased">
-        <div class="flex min-h-screen w-full flex-col overflow-hidden bg-white">
+    <body class="bg-[#f8f4ea] font-sans antialiased">
+        <div class="flex min-h-screen w-full flex-col overflow-hidden bg-[#f8f4ea]">
             @include('behandelingen.partials.header')

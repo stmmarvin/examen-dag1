@@ -1,26 +1,22 @@
-<header class="border-b border-gray-400 bg-white">
-    <div class="flex h-24 w-full items-center justify-between px-10">
-        <a href="{{ route('behandelingen.index') }}" class="flex items-center gap-4">
-            <span class="relative block h-12 w-12 border border-gray-900">
-                <span class="absolute left-0 top-1/2 h-px w-full -rotate-45 bg-gray-900"></span>
-                <span class="absolute left-0 top-1/2 h-px w-full rotate-45 bg-gray-900"></span>
-            </span>
-            <span class="text-xl font-bold text-black">Kapperszaak</span>
+<header class="border-b border-[#d7c39a] bg-white text-[#0f1f3a] shadow-sm">
+    <div class="flex h-28 w-full items-center justify-between px-10">
+        <a href="{{ route('behandelingen.index') }}" class="flex items-center">
+            <img src="{{ asset('images/kniploket-tiko-logo.svg') }}" alt="kniploket tiko" class="h-24 w-auto">
         </a>
 
-        <nav class="hidden items-center gap-12 text-sm font-semibold text-black md:flex">
-            <a href="{{ route('dashboard') }}" class="hover:underline">Home</a>
-            <a href="{{ route('behandelingen.index') }}" class="border-b-2 border-black pb-1">Behandelingen</a>
-            <a href="#" class="hover:underline">Over ons</a>
-            <a href="#" class="hover:underline">Contact</a>
+        <nav class="hidden items-center gap-12 text-sm font-semibold text-[#0f1f3a] md:flex">
+            <a href="{{ route('dashboard') }}" class="hover:text-[#c69a3e]">Home</a>
+            <a href="{{ route('behandelingen.index') }}" class="border-b-2 border-[#c69a3e] pb-1">Behandelingen</a>
+            <a href="#" class="hover:text-[#c69a3e]">Over ons</a>
+            <a href="#" class="hover:text-[#c69a3e]">Contact</a>
         </nav>
 
-        <div class="flex items-center gap-3 text-sm font-semibold text-black">
-            <span class="flex h-9 w-9 items-center justify-center rounded-full border border-black">
-                <span class="text-lg leading-none">◎</span>
+        <div class="flex items-center gap-3 text-sm font-semibold text-[#0f1f3a]">
+            <span class="flex h-9 w-9 items-center justify-center rounded-full border border-[#0f1f3a] bg-[#f8f4ea]">
+                <span class="h-2 w-2 rounded-full bg-[#c69a3e]"></span>
             </span>
             <span>Mijn account</span>
-            <span class="text-lg leading-none">⌄</span>
+            <span class="text-lg leading-none">v</span>
         </div>
     </div>
 </header>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 520" role="img" aria-labelledby="title desc">
+    <title id="title">kniploket tiko logo</title>
+    <desc id="desc">Logo van kniploket tiko met een schaar en goudblauwe tekst.</desc>
+    <rect width="520" height="520" fill="white"/>
+
+    <g fill="none" stroke="#0f1f3a" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M154 255V140c0-38 30-68 68-68h142c38 0 68 30 68 68v115" stroke-width="18"/>
+        <path d="M130 280h288" stroke-width="18"/>
+
+        <path d="M266 232 205 94M266 232 332 94" stroke-width="18"/>
+        <path d="M232 280 326 82" stroke-width="18"/>
+        <path d="M213 280 266 232" stroke-width="18"/>
+        <circle cx="214" cy="280" r="30" stroke-width="18"/>
+        <circle cx="315" cy="280" r="30" stroke-width="18"/>
+        <circle cx="268" cy="222" r="9" fill="#0f1f3a" stroke="none"/>
+
+        <rect x="390" y="178" width="78" height="58" rx="5" stroke-width="14"/>
+        <path d="M429 236v38M405 274h48" stroke-width="14"/>
+    </g>
+
+    <text x="42" y="368" font-family="Arial, Helvetica, sans-serif" font-size="92" font-weight="900">
+        <tspan fill="#0f1f3a">knip</tspan><tspan fill="#c69a3e">loket</tspan>
+    </text>
+    <text x="208" y="452" font-family="Arial, Helvetica, sans-serif" font-size="74" font-weight="500" fill="#0f1f3a">tiko</text>
+    <path d="M84 432h110M326 432h110" stroke="#c69a3e" stroke-width="6" stroke-linecap="round"/>
+</svg>
