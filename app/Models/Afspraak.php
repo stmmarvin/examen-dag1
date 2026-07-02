@@ -8,17 +8,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Afspraak extends Model
 {
     protected $fillable = [
+        'klant_id',
         'medewerker_id',
-        'klantnaam',
-        'behandeling',
-        'starttijd',
+        'start_datumtijd',
+        'eind_datumtijd',
         'status',
+        'opmerking_klant',
+        'interne_notitie',
+        'totaalprijs',
+        'aangemaakt_door_gebruiker_id',
     ];
 
     protected function casts(): array
     {
         return [
-            'starttijd' => 'datetime',
+            'start_datumtijd' => 'datetime',
+            'eind_datumtijd' => 'datetime',
+            'totaalprijs' => 'decimal:2',
         ];
     }
 

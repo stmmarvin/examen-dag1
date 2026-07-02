@@ -7,25 +7,37 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Maak de persoonsgegevens los van de medewerkergegevens.
+     * Maak de rol- en gebruikerstabellen uit het gezamenlijke databaseschema.
      */
     public function up(): void
     {
-        Schema::create('personen', function (Blueprint $table) {
+        Schema::create('rollen', function (Blueprint $table) {
             $table->id();
-            $table->string('voornaam', 80);
-            $table->string('achternaam', 80);
-            $table->string('telefoonnummer', 20);
-            $table->string('emailadres')->unique();
+            $table->string('naam', 50)->unique();
+            $table->string('omschrijving')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('gebruikers', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('rol_id')->constrained('rollen')->restrictOnDelete()->cascadeOnUpdate();
+            $table->string('voornaam', 100);
+            $table->string('achternaam', 100);
+            $table->string('email')->unique();
+            $table->string('telefoon', 30)->nullable();
+            $table->string('wachtwoord');
+            $table->boolean('actief')->default(true);
+            $table->dateTime('laatste_login')->nullable();
             $table->timestamps();
         });
     }
 
     /**
-     * Verwijder de tabel bij rollback van de dag 2 functionaliteit.
+     * Verwijder de tabellen in omgekeerde volgorde vanwege foreign keys.
      */
     public function down(): void
     {
-        Schema::dropIfExists('personen');
+        Schema::dropIfExists('gebruikers');
+        Schema::dropIfExists('rollen');
     }
 };

@@ -5,34 +5,34 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Medewerker extends Model
 {
     protected $fillable = [
-        'persoon_id',
+        'gebruiker_id',
+        'personeelsnummer',
         'functie',
-        'specialisaties',
-        'status',
-        'startdatum',
+        'in_dienst_sinds',
         'werkdagen',
         'werktijden',
+        'notities',
     ];
 
     protected function casts(): array
     {
         return [
-            'specialisaties' => 'array',
-            'startdatum' => 'date',
+            'in_dienst_sinds' => 'date',
         ];
     }
 
     /**
-     * De medewerkergegevens horen bij de persoonsgegevens.
+     * De medewerkergegevens horen bij de gebruiker uit het team-schema.
      */
-    public function persoon(): BelongsTo
+    public function gebruiker(): BelongsTo
     {
-        return $this->belongsTo(Persoon::class);
+        return $this->belongsTo(Gebruiker::class);
     }
 
     /**
@@ -41,6 +41,14 @@ class Medewerker extends Model
     public function afspraken(): HasMany
     {
         return $this->hasMany(Afspraak::class);
+    }
+
+    /**
+     * Specialisaties worden opgeslagen als gekoppelde behandelingen.
+     */
+    public function behandelingen(): BelongsToMany
+    {
+        return $this->belongsToMany(Behandeling::class, 'medewerker_behandeling');
     }
 
     /**
@@ -54,12 +62,12 @@ class Medewerker extends Model
 
         return $query->where(function (Builder $query) use ($zoekterm): void {
             $query->where('functie', 'like', "%{$zoekterm}%")
-                ->orWhere('status', 'like', "%{$zoekterm}%")
-                ->orWhereHas('persoon', function (Builder $persoonQuery) use ($zoekterm): void {
+                ->orWhere('personeelsnummer', 'like', "%{$zoekterm}%")
+                ->orWhereHas('gebruiker', function (Builder $persoonQuery) use ($zoekterm): void {
                     $persoonQuery->where('voornaam', 'like', "%{$zoekterm}%")
                         ->orWhere('achternaam', 'like', "%{$zoekterm}%")
-                        ->orWhere('telefoonnummer', 'like', "%{$zoekterm}%")
-                        ->orWhere('emailadres', 'like', "%{$zoekterm}%");
+                        ->orWhere('telefoon', 'like', "%{$zoekterm}%")
+                        ->orWhere('email', 'like', "%{$zoekterm}%");
                 });
         });
     }
@@ -70,9 +78,17 @@ class Medewerker extends Model
     public function hasFutureAppointments(): bool
     {
         return $this->afspraken()
-            ->where('starttijd', '>=', now())
-            ->where('status', '!=', 'Geannuleerd')
+            ->where('start_datumtijd', '>=', now())
+            ->where('status', '!=', 'geannuleerd')
             ->exists();
+    }
+
+    /**
+     * Status wordt afgeleid uit de gekoppelde gebruiker.
+     */
+    public function statusTekst(): string
+    {
+        return $this->gebruiker?->actief ? 'In dienst' : 'Uit dienst';
     }
 
     /**
@@ -80,6 +96,6 @@ class Medewerker extends Model
      */
     public function specialisatiesTekst(): string
     {
-        return implode(', ', $this->specialisaties ?? []);
+        return $this->behandelingen->pluck('naam')->implode(', ');
     }
 }

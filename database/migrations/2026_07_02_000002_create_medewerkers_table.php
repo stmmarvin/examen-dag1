@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('medewerkers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('persoon_id')->constrained('personen')->cascadeOnDelete();
-            $table->string('functie', 80);
-            $table->json('specialisaties');
-            $table->string('status', 40)->default('In dienst');
-            $table->date('startdatum')->nullable();
+            $table->foreignId('gebruiker_id')->unique()->constrained('gebruikers')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('personeelsnummer', 50)->unique();
+            $table->string('functie', 100)->nullable();
+            $table->date('in_dienst_sinds')->nullable();
             $table->string('werkdagen', 120)->default('Maandag t/m vrijdag');
             $table->string('werktijden', 40)->default('09:00 - 17:00');
+            $table->text('notities')->nullable();
             $table->timestamps();
 
-            $table->index(['status', 'functie']);
+            $table->index('functie');
         });
     }
 

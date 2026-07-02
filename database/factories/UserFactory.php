@@ -29,8 +29,8 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
-            // Dag 2 gebruikt rollen om manager-functionaliteit te beveiligen.
-            'rolename' => 'manager',
+            // Dag 2 gebruikt de rol Eigenaar voor beheerfunctionaliteit.
+            'rolename' => 'eigenaar',
             'remember_token' => Str::random(10),
         ];
     }

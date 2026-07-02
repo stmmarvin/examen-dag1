@@ -22,25 +22,31 @@ class UpdateMedewerkerRequest extends FormRequest
      */
     public function rules(): array
     {
-        $persoonId = $this->route('medewerker')?->persoon_id;
+        $medewerker = $this->route('medewerker');
 
         return [
             'voornaam' => ['required', 'string', 'max:80'],
             'achternaam' => ['required', 'string', 'max:80'],
-            'telefoonnummer' => ['required', 'string', 'max:20'],
-            'emailadres' => [
+            'telefoon' => ['required', 'string', 'max:30'],
+            'email' => [
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('personen', 'emailadres')->ignore($persoonId),
+                Rule::unique('gebruikers', 'email')->ignore($medewerker?->gebruiker_id),
+            ],
+            'personeelsnummer' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('medewerkers', 'personeelsnummer')->ignore($medewerker?->id),
             ],
             'functie' => ['required', 'string', 'max:80'],
             'status' => ['required', 'string', 'max:40'],
-            'startdatum' => ['nullable', 'date'],
+            'in_dienst_sinds' => ['nullable', 'date'],
             'werkdagen' => ['nullable', 'string', 'max:120'],
             'werktijden' => ['nullable', 'string', 'max:40'],
             'specialisaties' => ['required', 'array', 'min:1'],
-            'specialisaties.*' => ['string', 'in:Knippen,Kleuren,Styling,Extensions'],
+            'specialisaties.*' => ['integer', 'exists:behandelingen,id'],
         ];
     }
 
@@ -55,8 +61,9 @@ class UpdateMedewerkerRequest extends FormRequest
             '*.required' => 'Vul alle verplichte velden in',
             'specialisaties.required' => 'Vul alle verplichte velden in',
             'specialisaties.min' => 'Vul alle verplichte velden in',
-            'emailadres.email' => 'Voer een geldig e-mailadres in',
-            'emailadres.unique' => 'Dit e-mailadres is al in gebruik',
+            'email.email' => 'Voer een geldig e-mailadres in',
+            'email.unique' => 'Dit e-mailadres is al in gebruik',
+            'personeelsnummer.unique' => 'Dit personeelsnummer is al in gebruik',
         ];
     }
 }
