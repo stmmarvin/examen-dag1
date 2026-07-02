@@ -28,12 +28,17 @@
                 <span>Medewerker bewerken</span>
             </a>
 
-            @unless ($isEigenaarAccount)
+            @if ($isEigenaarAccount)
+                <span class="flex cursor-not-allowed items-center gap-5 rounded px-4 py-4 text-gray-400" title="Het eigenaaraccount kan niet worden verwijderd">
+                    <span class="text-lg">▱</span>
+                    <span>Medewerker verwijderen</span>
+                </span>
+            @else
                 <a href="{{ route('medewerkers.delete', $actieMedewerker) }}" class="flex items-center gap-5 rounded px-4 py-4 {{ $active === 'delete' ? 'bg-gray-200' : '' }}">
                     <span class="text-lg">▱</span>
                     <span>Medewerker verwijderen</span>
                 </a>
-            @endunless
+            @endif
         @else
             <span class="flex cursor-not-allowed items-center gap-5 rounded px-4 py-4 text-gray-400">
                 <span class="text-lg">✎</span>
