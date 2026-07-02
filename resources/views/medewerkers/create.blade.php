@@ -21,7 +21,7 @@
                         Annuleren
                     </a>
                     <button class="rounded bg-black px-8 py-3 text-sm font-bold text-white">
-                        + Medewerker aanmaken
+                        Opslaan
                     </button>
                 </div>
             </form>

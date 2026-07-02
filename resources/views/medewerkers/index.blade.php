@@ -25,11 +25,13 @@
                     <h2 class="px-5 py-5 text-sm font-bold">Alle medewerkers ({{ $medewerkers->count() }})</h2>
 
                     @forelse ($medewerkers as $medewerker)
-                        <a href="{{ route('medewerkers.index', ['medewerker' => $medewerker->id, 'zoek' => $zoekterm]) }}" class="flex min-w-0 gap-5 border-t border-gray-300 px-5 py-4 {{ optional($geselecteerdeMedewerker)->id === $medewerker->id ? 'bg-gray-200' : '' }}">
+                        <a href="{{ route('medewerkers.index', ['medewerker' => $medewerker->id, 'zoek' => $zoekterm]) }}" class="flex min-w-0 gap-4 border-t border-gray-300 px-5 py-4 {{ optional($geselecteerdeMedewerker)->id === $medewerker->id ? 'bg-gray-200' : '' }}">
                             <span class="mt-1 h-9 w-9 rounded-full border border-black"></span>
                             <span class="min-w-0">
                                 <span class="block truncate font-bold">{{ $medewerker->gebruiker->volledige_naam }}</span>
-                                <span class="block truncate text-sm">{{ $medewerker->functie }}</span>
+                                <span class="block truncate text-sm">{{ $medewerker->functie }} · {{ $medewerker->statusTekst() }}</span>
+                                <span class="block truncate text-xs text-gray-700">{{ $medewerker->gebruiker->email }}</span>
+                                <span class="block truncate text-xs text-gray-700">{{ $medewerker->specialisatiesTekst() ?: 'Geen specialisatie' }}</span>
                             </span>
                         </a>
                     @empty
@@ -54,9 +56,14 @@
                                 </div>
                             </div>
 
-                            <a href="{{ route('medewerkers.edit', $geselecteerdeMedewerker) }}" class="rounded border border-gray-400 px-10 py-3 text-sm font-bold">
-                                Bewerken
-                            </a>
+                            <div class="flex shrink-0 flex-wrap gap-3">
+                                <a href="{{ route('medewerkers.edit', $geselecteerdeMedewerker) }}" class="rounded border border-gray-400 px-10 py-3 text-sm font-bold">
+                                    Wijzigen
+                                </a>
+                                <a href="{{ route('medewerkers.delete', $geselecteerdeMedewerker) }}" class="rounded border border-gray-400 px-8 py-3 text-sm font-bold text-red-600">
+                                    Verwijderen
+                                </a>
+                            </div>
                         </div>
 
                         <div class="mt-8 border-y border-gray-400">
