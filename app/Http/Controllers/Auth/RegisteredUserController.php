@@ -31,23 +31,27 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'voornaam' => ['required', 'string', 'max:255'],
+            'achternaam' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'telefoon' => ['nullable', 'string', 'max:20'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'rolename' => ['required', 'string', 'max:20'],
         ]);
 
         $user = User::create([
-            'name' => $request->name,
+            'name' => $request->voornaam . ' ' . $request->achternaam,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'rolename' => $request->rolename,
+            'voornaam' => $request->voornaam,
+            'achternaam' => $request->achternaam,
+            'telefoon' => $request->telefoon,
+            'rolename' => 'klant',
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect()->route('profiel.index');
     }
 }
