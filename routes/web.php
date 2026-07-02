@@ -18,4 +18,6 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// Laadt de routes van mijn behandeling onderdeel.
 require __DIR__.'/behandelingen.php';

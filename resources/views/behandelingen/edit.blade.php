@@ -1,5 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
+        {{-- Pagina om een behandeling te wijzigen. --}}
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">Behandeling wijzigen</h2>
     </x-slot>
 

@@ -6,6 +6,7 @@ class BehandelingKeuzes
 {
     public static function standaard(): array
     {
+        // Standaard keuzes voor Kniploket Tiko.
         return [
             [
                 'naam' => 'Heren knippen',

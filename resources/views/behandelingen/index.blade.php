@@ -1,5 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
+        {{-- Header van mijn behandeling overzicht. --}}
         <div class="flex items-center justify-between gap-4">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Behandelingsoverzicht</h2>
             <a href="{{ route('behandelingen.create') }}" class="inline-flex items-center rounded-md bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white hover:bg-gray-700">
@@ -19,6 +20,7 @@
             @endif
 
             <div class="bg-white p-6 shadow-sm sm:rounded-lg">
+                {{-- Zoek en filter formulier. --}}
                 <form method="GET" action="{{ route('behandelingen.index') }}" class="grid gap-4 md:grid-cols-[1fr_220px_auto]">
                     <div>
                         <x-input-label for="zoek" value="Zoeken" />
@@ -43,6 +45,7 @@
 
                 <div class="mt-6 overflow-x-auto">
                     @if ($behandelingen->count())
+                        {{-- Tabel met alle behandelingen. --}}
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
@@ -73,6 +76,7 @@
 
                         <div class="mt-4">{{ $behandelingen->links() }}</div>
                     @else
+                        {{-- Melding als er geen behandelingen zijn. --}}
                         <p class="rounded-md bg-gray-50 p-4 text-sm text-gray-700">
                             {{ $zoekterm !== '' || $geselecteerdType !== '' ? 'Geen resultaten gevonden' : 'Geen behandelingen gevonden' }}
                         </p>

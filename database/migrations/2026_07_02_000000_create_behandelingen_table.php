@@ -8,6 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // Maakt de tabel voor mijn behandeling CRUD.
         Schema::create('behandelingen', function (Blueprint $table) {
             $table->id();
             $table->string('naam');
@@ -19,12 +20,14 @@ return new class extends Migration
             $table->boolean('actief')->default(true);
             $table->timestamps();
 
+            // Maakt filteren op type en status sneller.
             $table->index(['type', 'actief']);
         });
     }
 
     public function down(): void
     {
+        // Verwijdert de tabel als de migratie wordt teruggedraaid.
         Schema::dropIfExists('behandelingen');
     }
 };

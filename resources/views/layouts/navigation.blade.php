@@ -15,6 +15,7 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <!-- Link naar mijn behandeling onderdeel. -->
                     <x-nav-link :href="route('behandelingen.index')" :active="request()->routeIs('behandelingen.*')">
                         Behandelingen
                     </x-nav-link>
@@ -73,6 +74,7 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            <!-- Mobiele link naar mijn behandeling onderdeel. -->
             <x-responsive-nav-link :href="route('behandelingen.index')" :active="request()->routeIs('behandelingen.*')">
                 Behandelingen
             </x-responsive-nav-link>

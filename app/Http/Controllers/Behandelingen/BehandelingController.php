@@ -13,17 +13,20 @@ use Illuminate\View\View;
 
 class BehandelingController extends Controller
 {
+    // Laat alle behandelingen zien met zoeken en filteren.
     public function index(Request $request): View
     {
         $zoekterm = trim((string) $request->query('zoek'));
         $type = trim((string) $request->query('type'));
 
+        // Deze types worden gebruikt voor de filter dropdown.
         $types = Behandeling::query()
             ->select('type')
             ->distinct()
             ->orderBy('type')
             ->pluck('type');
 
+        // Hier worden zoekterm en type-filter toegepast op de lijst.
         $behandelingen = Behandeling::query()
             ->when($zoekterm !== '', function ($query) use ($zoekterm) {
                 $query->where(function ($query) use ($zoekterm) {
@@ -47,6 +50,7 @@ class BehandelingController extends Controller
 
     public function create(): View
     {
+        // Leeg formulier met standaard keuzes voor behandelingen.
         return view('behandelingen.create', [
             'behandeling' => new Behandeling(['actief' => true]),
             'behandelingKeuzes' => BehandelingKeuzes::standaard(),
@@ -55,6 +59,7 @@ class BehandelingController extends Controller
 
     public function store(StoreBehandelingRequest $request): RedirectResponse
     {
+        // Slaat een nieuwe behandeling op na validatie.
         $behandeling = Behandeling::create($request->validated());
 
         return redirect()
@@ -64,6 +69,7 @@ class BehandelingController extends Controller
 
     public function show(Behandeling $behandeling): View
     {
+        // Detailpagina van een behandeling.
         return view('behandelingen.show', [
             'behandeling' => $behandeling,
         ]);
@@ -71,6 +77,7 @@ class BehandelingController extends Controller
 
     public function edit(Behandeling $behandeling): View
     {
+        // Formulier om een bestaande behandeling aan te passen.
         return view('behandelingen.edit', [
             'behandeling' => $behandeling,
             'behandelingKeuzes' => BehandelingKeuzes::standaard(),
@@ -79,6 +86,7 @@ class BehandelingController extends Controller
 
     public function update(UpdateBehandelingRequest $request, Behandeling $behandeling): RedirectResponse
     {
+        // Werkt een bestaande behandeling bij.
         $behandeling->update($request->validated());
 
         return redirect()
@@ -88,6 +96,7 @@ class BehandelingController extends Controller
 
     public function destroy(Behandeling $behandeling): RedirectResponse
     {
+        // Verwijdert de gekozen behandeling.
         $behandeling->delete();
 
         return redirect()

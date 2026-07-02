@@ -1,6 +1,8 @@
 @csrf
 
+{{-- Formulier voor behandeling toevoegen en wijzigen. --}}
 <div class="grid gap-6 md:grid-cols-2">
+    {{-- Keuze vult automatisch de velden in. --}}
     <div class="md:col-span-2">
         <x-input-label for="behandeling_keuze" value="Kies standaardbehandeling" />
         <select id="behandeling_keuze" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
@@ -53,6 +55,7 @@
     </label>
 </div>
 
+{{-- Knoppen om op te slaan of terug te gaan. --}}
 <div class="mt-6 flex items-center gap-3">
     <x-primary-button>Opslaan</x-primary-button>
     <a href="{{ route('behandelingen.index') }}" class="text-sm text-gray-600 hover:text-gray-900">Annuleren</a>
@@ -60,6 +63,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // Vult het formulier met de gekozen standaardbehandeling.
         const keuzes = @js($behandelingKeuzes);
         const keuzeSelect = document.getElementById('behandeling_keuze');
 
