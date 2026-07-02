@@ -15,12 +15,24 @@ return new class extends Migration
             return;
         }
 
+        if (! Schema::hasTable('klanten')) {
+            return;
+        }
+
         Schema::create('afspraken', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('medewerker_id')->constrained('medewerkers')->restrictOnDelete();
-            $table->dateTime('starttijd')->index();
-            $table->string('status', 40)->default('Gepland')->index();
+            $table->foreignId('klant_id')->constrained('klanten')->restrictOnDelete()->cascadeOnUpdate();
+            $table->foreignId('medewerker_id')->nullable()->constrained('medewerkers')->nullOnDelete()->cascadeOnUpdate();
+            $table->dateTime('start_datumtijd')->index();
+            $table->dateTime('eind_datumtijd');
+            $table->enum('status', ['gepland', 'bevestigd', 'uitgevoerd', 'geannuleerd', 'no_show'])->default('gepland')->index();
+            $table->text('opmerking_klant')->nullable();
+            $table->text('interne_notitie')->nullable();
+            $table->decimal('totaalprijs', 10, 2)->default(0);
+            $table->foreignId('aangemaakt_door_gebruiker_id')->nullable()->constrained('gebruikers')->nullOnDelete()->cascadeOnUpdate();
             $table->timestamps();
+
+            $table->index(['medewerker_id', 'start_datumtijd']);
         });
     }
 

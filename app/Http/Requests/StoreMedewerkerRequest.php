@@ -25,7 +25,7 @@ class StoreMedewerkerRequest extends FormRequest
             'voornaam' => ['required', 'string', 'max:80'],
             'achternaam' => ['required', 'string', 'max:80'],
             'telefoon' => ['required', 'string', 'max:30'],
-            'email' => ['required', 'email', 'max:255', 'unique:medewerkers,email'],
+            'email' => ['required', 'email', 'max:255', 'unique:gebruikers,email'],
             'personeelsnummer' => ['required', 'string', 'max:50', 'unique:medewerkers,personeelsnummer'],
             'functie' => ['required', 'string', 'max:80'],
             'status' => ['required', 'string', 'max:40'],
@@ -33,7 +33,7 @@ class StoreMedewerkerRequest extends FormRequest
             'werkdagen' => ['nullable', 'string', 'max:120'],
             'werktijden' => ['nullable', 'string', 'max:40'],
             'specialisaties' => ['required', 'array', 'min:1'],
-            'specialisaties.*' => ['string', 'in:Knippen,Kleuren,Styling,Extensions'],
+            'specialisaties.*' => ['integer', 'exists:behandelingen,id'],
         ];
     }
 

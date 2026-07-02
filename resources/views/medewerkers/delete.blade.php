@@ -18,8 +18,8 @@
                 <div class="mt-6 flex gap-6">
                     <span class="h-20 w-20 shrink-0 rounded-full border border-black"></span>
                     <div>
-                        <h3 class="text-2xl font-bold">{{ $medewerker->volledige_naam }}</h3>
-                        <p class="mt-3 text-sm">{{ $medewerker->telefoon }} · {{ $medewerker->email }}</p>
+                        <h3 class="text-2xl font-bold">{{ $medewerker->gebruiker->volledige_naam }}</h3>
+                        <p class="mt-3 text-sm">{{ $medewerker->gebruiker->telefoon }} · {{ $medewerker->gebruiker->email }}</p>
                         <p class="mt-4 text-sm">
                             In dienst sinds:
                             {{ optional($medewerker->in_dienst_sinds)->translatedFormat('d F Y') ?? 'Onbekend' }}
@@ -31,7 +31,7 @@
                     <dt class="font-bold">Functie</dt>
                     <dd>{{ $medewerker->functie }}</dd>
                     <dt class="font-bold">Status</dt>
-                    <dd>{{ $medewerker->status }}</dd>
+                    <dd>{{ $medewerker->statusTekst() }}</dd>
                     <dt class="font-bold">Specialisatie</dt>
                     <dd>{{ $medewerker->specialisatiesTekst() ?: 'Geen' }}</dd>
                     <dt class="font-bold">Toekomstige afspraken</dt>

@@ -28,7 +28,7 @@
                         <a href="{{ route('medewerkers.index', ['medewerker' => $medewerker->id, 'zoek' => $zoekterm]) }}" class="flex gap-5 border-t border-gray-300 px-5 py-4 {{ optional($geselecteerdeMedewerker)->id === $medewerker->id ? 'bg-gray-200' : '' }}">
                             <span class="mt-1 h-9 w-9 rounded-full border border-black"></span>
                             <span>
-                                <span class="block font-bold">{{ $medewerker->volledige_naam }}</span>
+                                <span class="block font-bold">{{ $medewerker->gebruiker->volledige_naam }}</span>
                                 <span class="block text-sm">{{ $medewerker->functie }}</span>
                             </span>
                         </a>
@@ -43,9 +43,9 @@
                             <div class="flex gap-6">
                                 <span class="h-20 w-20 rounded-full border border-black"></span>
                                 <div>
-                                    <h2 class="text-2xl font-bold">{{ $geselecteerdeMedewerker->volledige_naam }}</h2>
+                                    <h2 class="text-2xl font-bold">{{ $geselecteerdeMedewerker->gebruiker->volledige_naam }}</h2>
                                     <p class="mt-3 text-sm">
-                                        {{ $geselecteerdeMedewerker->telefoon }} · {{ $geselecteerdeMedewerker->email }}
+                                        {{ $geselecteerdeMedewerker->gebruiker->telefoon }} · {{ $geselecteerdeMedewerker->gebruiker->email }}
                                     </p>
                                     <p class="mt-4 text-sm">
                                         In dienst sinds:
@@ -72,13 +72,13 @@
                                 <h3 class="text-lg font-bold">Persoonlijke gegevens</h3>
                                 <dl class="mt-5 grid grid-cols-[160px_1fr] gap-y-3 text-sm">
                                     <dt class="font-bold">Naam</dt>
-                                    <dd>{{ $geselecteerdeMedewerker->volledige_naam }}</dd>
+                                    <dd>{{ $geselecteerdeMedewerker->gebruiker->volledige_naam }}</dd>
                                     <dt class="font-bold">Telefoon</dt>
-                                    <dd>{{ $geselecteerdeMedewerker->telefoon }}</dd>
+                                    <dd>{{ $geselecteerdeMedewerker->gebruiker->telefoon }}</dd>
                                     <dt class="font-bold">E-mail</dt>
-                                    <dd>{{ $geselecteerdeMedewerker->email }}</dd>
+                                    <dd>{{ $geselecteerdeMedewerker->gebruiker->email }}</dd>
                                     <dt class="font-bold">Status</dt>
-                                    <dd>{{ $geselecteerdeMedewerker->status }}</dd>
+                                    <dd>{{ $geselecteerdeMedewerker->statusTekst() }}</dd>
                                 </dl>
                             </div>
 

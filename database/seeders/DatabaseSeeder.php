@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
 
     /**
-     * Seed alleen data voor het medewerkeronderdeel.
+     * Seed data voor het medewerkeronderdeel binnen het bestaande schema.sql.
      */
     public function run(): void
     {
@@ -26,6 +26,41 @@ class DatabaseSeeder extends Seeder
             ],
         );
 
+        DB::table('rollen')->updateOrInsert(
+            ['naam' => 'eigenaar'],
+            ['omschrijving' => 'Kan medewerkers beheren', 'created_at' => now(), 'updated_at' => now()],
+        );
+
+        DB::table('rollen')->updateOrInsert(
+            ['naam' => 'klant'],
+            ['omschrijving' => 'Kan afspraken bekijken', 'created_at' => now(), 'updated_at' => now()],
+        );
+
+        $eigenaarRolId = DB::table('rollen')->where('naam', 'eigenaar')->value('id');
+        $klantRolId = DB::table('rollen')->where('naam', 'klant')->value('id');
+
+        $behandelingen = [
+            ['Knippen', 'Haar', 'Knippen en afwerken', 45, 32.50],
+            ['Kleuren', 'Haar', 'Volledige kleurbehandeling', 90, 68.00],
+            ['Styling', 'Haar', 'Stylen en föhnen', 40, 29.95],
+            ['Extensions', 'Haar', 'Extensions plaatsen', 120, 110.00],
+        ];
+
+        foreach ($behandelingen as $behandeling) {
+            DB::table('behandelingen')->updateOrInsert(
+                ['naam' => $behandeling[0]],
+                [
+                    'type' => $behandeling[1],
+                    'beschrijving' => $behandeling[2],
+                    'duur_minuten' => $behandeling[3],
+                    'prijs' => $behandeling[4],
+                    'actief' => true,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            );
+        }
+
         $medewerkers = [
             ['MW-001', 'Lisa', 'Jansen', '06 12345678', 'lisa@kniplokettiko.nl', 'Manager', ['Knippen', 'Kleuren'], '2021-01-10'],
             ['MW-002', 'Laura', 'Jansen', '06 23456789', 'laura@kniplokettiko.nl', 'Kapster', ['Knippen'], '2022-03-01'],
@@ -35,16 +70,27 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($medewerkers as $medewerker) {
-            DB::table('medewerkers')->updateOrInsert(
-                ['personeelsnummer' => $medewerker[0]],
+            DB::table('gebruikers')->updateOrInsert(
+                ['email' => $medewerker[4]],
                 [
+                    'rol_id' => $eigenaarRolId,
                     'voornaam' => $medewerker[1],
                     'achternaam' => $medewerker[2],
                     'telefoon' => $medewerker[3],
-                    'email' => $medewerker[4],
+                    'wachtwoord' => Hash::make('Welkom123!'),
+                    'actief' => true,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            );
+
+            $gebruikerId = DB::table('gebruikers')->where('email', $medewerker[4])->value('id');
+
+            DB::table('medewerkers')->updateOrInsert(
+                ['personeelsnummer' => $medewerker[0]],
+                [
+                    'gebruiker_id' => $gebruikerId,
                     'functie' => $medewerker[5],
-                    'specialisaties' => json_encode($medewerker[6]),
-                    'status' => 'In dienst',
                     'in_dienst_sinds' => $medewerker[7],
                     'werkdagen' => 'Maandag t/m vrijdag',
                     'werktijden' => '09:00 - 17:00',
@@ -52,16 +98,56 @@ class DatabaseSeeder extends Seeder
                     'updated_at' => now(),
                 ],
             );
+
+            $medewerkerId = DB::table('medewerkers')->where('personeelsnummer', $medewerker[0])->value('id');
+
+            foreach ($medewerker[6] as $specialisatie) {
+                $behandelingId = DB::table('behandelingen')->where('naam', $specialisatie)->value('id');
+
+                DB::table('medewerker_behandeling')->updateOrInsert([
+                    'medewerker_id' => $medewerkerId,
+                    'behandeling_id' => $behandelingId,
+                ]);
+            }
         }
 
-        // Alleen voor de acceptatie-eis: Lisa kan niet verwijderd worden door toekomstige planning.
-        $lisaId = DB::table('medewerkers')->where('personeelsnummer', 'MW-001')->value('id');
+        $klantGebruikerId = DB::table('gebruikers')->updateOrInsert(
+            ['email' => 'sanne@example.test'],
+            [
+                'rol_id' => $klantRolId,
+                'voornaam' => 'Sanne',
+                'achternaam' => 'de Vries',
+                'telefoon' => '06 67890123',
+                'wachtwoord' => Hash::make('Welkom123!'),
+                'actief' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        );
 
-        if ($lisaId) {
+        $klantGebruikerId = DB::table('gebruikers')->where('email', 'sanne@example.test')->value('id');
+
+        DB::table('klanten')->updateOrInsert(
+            ['gebruiker_id' => $klantGebruikerId],
+            [
+                'plaats' => 'Utrecht',
+                'land' => 'Nederland',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        );
+
+        $lisaId = DB::table('medewerkers')->where('personeelsnummer', 'MW-001')->value('id');
+        $klantId = DB::table('klanten')->where('gebruiker_id', $klantGebruikerId)->value('id');
+
+        if ($lisaId && $klantId) {
             DB::table('afspraken')->updateOrInsert(
-                ['medewerker_id' => $lisaId, 'status' => 'Gepland'],
+                ['klant_id' => $klantId, 'medewerker_id' => $lisaId, 'status' => 'gepland'],
                 [
-                    'starttijd' => now()->addWeek(),
+                    'start_datumtijd' => now()->addWeek(),
+                    'eind_datumtijd' => now()->addWeek()->addHour(),
+                    'totaalprijs' => 32.50,
+                    'aangemaakt_door_gebruiker_id' => $klantGebruikerId,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
