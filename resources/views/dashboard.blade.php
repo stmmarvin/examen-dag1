@@ -21,7 +21,7 @@
                 <p class="text-sm font-semibold text-[#c69a3e]">Behandelingen</p>
                 <p class="mt-2 text-2xl font-bold text-[#0f1f3a]">Overzicht</p>
             </a>
-            <a href="{{ route('profile.edit') }}" class="rounded-lg border border-slate-200 p-5 shadow-sm hover:border-[#c69a3e]" style="background: rgba(255, 255, 255, .92);">
+            <a href="{{ route('profiel.edit') }}" class="rounded-lg border border-slate-200 p-5 shadow-sm hover:border-[#c69a3e]" style="background: rgba(255, 255, 255, .92);">
                 <p class="text-sm font-semibold text-[#c69a3e]">Account</p>
                 <p class="mt-2 text-2xl font-bold text-[#0f1f3a]">Profiel</p>
             </a>

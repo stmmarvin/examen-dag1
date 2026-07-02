@@ -1,107 +1,78 @@
-<!DOCTYPE html>
-<html lang="nl">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Profiel Bewerken - Kniploket Tiko</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-        }
-    </style>
-</head>
-<body class="bg-gradient-to-br from-slate-800 to-slate-900 min-h-screen">
-    <!-- Header -->
-    <div class="bg-slate-900/50 border-b border-slate-700">
-        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div>
-                <h1 class="text-2xl font-bold">
-                    <span class="text-slate-200">knip</span><span class="text-amber-500">loket</span>
-                    <span class="text-slate-400 text-lg ml-2">tiko</span>
-                </h1>
-            </div>
-            <div class="flex gap-4">
-                <a href="{{ route('profiel.index') }}" class="text-slate-300 hover:text-white transition">
-                    Terug naar profiel
-                </a>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="text-slate-300 hover:text-white transition">
-                        Uitloggen
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
+@include('behandelingen.partials.page-start')
 
-    <!-- Main Content -->
-    <div class="max-w-4xl mx-auto px-4 py-8">
+<main class="flex-1">
+    <section class="mx-auto w-full px-8 py-12" style="max-width: 1200px;">
         <!-- Edit Form -->
-        <div class="bg-white rounded-lg shadow-2xl p-8">
-            <h2 class="text-3xl font-bold text-slate-800 mb-6">Profiel Bewerken</h2>
+        <div class="rounded-lg border border-[#d7c39a] bg-white p-8 shadow-lg">
+            <div class="mb-8 flex items-center justify-between border-b border-[#d7c39a] pb-6">
+                <h2 class="text-3xl font-bold text-[#0f1f3a]">Profiel Bewerken</h2>
+                <a href="{{ route('profiel.index') }}" 
+                   class="text-sm font-semibold text-[#0f1f3a] hover:text-[#c69a3e]">
+                    ← Terug naar profiel
+                </a>
+            </div>
 
             <form method="POST" action="{{ route('profiel.update') }}">
                 @csrf
                 @method('PATCH')
 
                 <!-- Persoonlijke Info -->
-                <div class="mb-6">
-                    <h3 class="text-lg font-semibold text-amber-600 mb-4">Persoonlijke Informatie</h3>
+                <div class="mb-8">
+                    <h3 class="mb-4 text-lg font-semibold text-[#c69a3e]">Persoonlijke Informatie</h3>
                     
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                         <div>
-                            <label for="voornaam" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="voornaam" class="mb-2 block text-sm font-semibold text-[#0f1f3a]">
                                 Voornaam <span class="text-red-500">*</span>
                             </label>
                             <input id="voornaam" type="text" name="voornaam" value="{{ old('voornaam', $user->voornaam) }}" required 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                                   class="w-full rounded-md border-2 border-[#d7c39a] px-4 py-3 focus:border-[#c69a3e] focus:outline-none">
                             @error('voornaam')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div>
-                            <label for="achternaam" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="achternaam" class="mb-2 block text-sm font-semibold text-[#0f1f3a]">
                                 Achternaam <span class="text-red-500">*</span>
                             </label>
                             <input id="achternaam" type="text" name="achternaam" value="{{ old('achternaam', $user->achternaam) }}" required 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                                   class="w-full rounded-md border-2 border-[#d7c39a] px-4 py-3 focus:border-[#c69a3e] focus:outline-none">
                             @error('achternaam')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="email" class="mb-2 block text-sm font-semibold text-[#0f1f3a]">
                                 Email <span class="text-red-500">*</span>
                             </label>
                             <input id="email" type="email" name="email" value="{{ old('email', $user->email) }}" required 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                                   class="w-full rounded-md border-2 border-[#d7c39a] px-4 py-3 focus:border-[#c69a3e] focus:outline-none">
                             @error('email')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div>
-                            <label for="telefoon" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="telefoon" class="mb-2 block text-sm font-semibold text-[#0f1f3a]">
                                 Telefoon
                             </label>
                             <input id="telefoon" type="tel" name="telefoon" value="{{ old('telefoon', $user->telefoon) }}" 
-                                   placeholder="0612345678" pattern="(06|\+316)[0-9]{8}" title="Telefoonnummer moet beginnen met 06 gevolgd door 8 cijfers"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                                   placeholder="0612345678" pattern="(06|\+316)[0-9]{8}"
+                                   class="w-full rounded-md border-2 border-[#d7c39a] px-4 py-3 focus:border-[#c69a3e] focus:outline-none">
                             @error('telefoon')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div>
-                            <label for="geboortedatum" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="geboortedatum" class="mb-2 block text-sm font-semibold text-[#0f1f3a]">
                                 Geboortedatum
                             </label>
                             <input id="geboortedatum" type="date" name="geboortedatum" value="{{ old('geboortedatum', $user->geboortedatum) }}" 
                                    max="{{ date('Y-m-d') }}"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                                   class="w-full rounded-md border-2 border-[#d7c39a] px-4 py-3 focus:border-[#c69a3e] focus:outline-none">
                             @error('geboortedatum')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -110,41 +81,41 @@
                 </div>
 
                 <!-- Adres Info -->
-                <div class="mb-6">
-                    <h3 class="text-lg font-semibold text-amber-600 mb-4">Adresgegevens</h3>
+                <div class="mb-8">
+                    <h3 class="mb-4 text-lg font-semibold text-[#c69a3e]">Adresgegevens</h3>
                     
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="col-span-2">
-                            <label for="adres" class="block text-sm font-medium text-gray-700 mb-2">
+                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                        <div class="md:col-span-2">
+                            <label for="adres" class="mb-2 block text-sm font-semibold text-[#0f1f3a]">
                                 Adres
                             </label>
                             <input id="adres" type="text" name="adres" value="{{ old('adres', $user->adres) }}" 
                                    placeholder="Straatnaam 123"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                                   class="w-full rounded-md border-2 border-[#d7c39a] px-4 py-3 focus:border-[#c69a3e] focus:outline-none">
                             @error('adres')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div>
-                            <label for="postcode" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="postcode" class="mb-2 block text-sm font-semibold text-[#0f1f3a]">
                                 Postcode
                             </label>
                             <input id="postcode" type="text" name="postcode" value="{{ old('postcode', $user->postcode) }}" 
-                                   placeholder="1234AB" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}" title="Postcode moet het Nederlandse formaat hebben (bijv. 1234AB)"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                                   placeholder="1234AB" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}"
+                                   class="w-full rounded-md border-2 border-[#d7c39a] px-4 py-3 focus:border-[#c69a3e] focus:outline-none">
                             @error('postcode')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div>
-                            <label for="plaats" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="plaats" class="mb-2 block text-sm font-semibold text-[#0f1f3a]">
                                 Plaats
                             </label>
                             <input id="plaats" type="text" name="plaats" value="{{ old('plaats', $user->plaats) }}" 
                                    placeholder="Amsterdam"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                                   class="w-full rounded-md border-2 border-[#d7c39a] px-4 py-3 focus:border-[#c69a3e] focus:outline-none">
                             @error('plaats')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -153,29 +124,29 @@
                 </div>
 
                 <!-- Extra Info -->
-                <div class="mb-6">
-                    <h3 class="text-lg font-semibold text-amber-600 mb-4">Extra Informatie</h3>
+                <div class="mb-8">
+                    <h3 class="mb-4 text-lg font-semibold text-[#c69a3e]">Extra Informatie</h3>
                     
-                    <div class="space-y-4">
+                    <div class="space-y-6">
                         <div>
-                            <label for="allergieen" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="allergieen" class="mb-2 block text-sm font-semibold text-[#0f1f3a]">
                                 Allergieën
                             </label>
                             <textarea id="allergieen" name="allergieen" rows="3" 
                                       placeholder="Bijvoorbeeld: noten, parfum, etc."
-                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">{{ old('allergieen', $user->allergieen) }}</textarea>
+                                      class="w-full rounded-md border-2 border-[#d7c39a] px-4 py-3 focus:border-[#c69a3e] focus:outline-none">{{ old('allergieen', $user->allergieen) }}</textarea>
                             @error('allergieen')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div>
-                            <label for="wensen" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="wensen" class="mb-2 block text-sm font-semibold text-[#0f1f3a]">
                                 Wensen
                             </label>
                             <textarea id="wensen" name="wensen" rows="3" 
                                       placeholder="Speciale wensen of opmerkingen"
-                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">{{ old('wensen', $user->wensen) }}</textarea>
+                                      class="w-full rounded-md border-2 border-[#d7c39a] px-4 py-3 focus:border-[#c69a3e] focus:outline-none">{{ old('wensen', $user->wensen) }}</textarea>
                             @error('wensen')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -184,14 +155,15 @@
                 </div>
 
                 <!-- Buttons -->
-                <div class="flex justify-between items-center pt-6 border-t border-gray-200">
+                <div class="flex items-center justify-between border-t border-[#d7c39a] pt-6">
                     <button type="submit" 
-                            class="bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white font-semibold py-3 px-8 rounded-lg transition duration-200">
+                            class="rounded-md px-8 py-4 text-sm font-bold text-white shadow-lg transition hover:shadow-xl" 
+                            style="background: #c69a3e;">
                         Opslaan
                     </button>
 
                     <button type="button" onclick="if(confirm('Weet je zeker dat je je account wilt verwijderen?')) document.getElementById('delete-form').submit();"
-                            class="text-red-600 hover:text-red-700 font-semibold">
+                            class="text-sm font-semibold text-red-600 hover:text-red-700">
                         Account verwijderen
                     </button>
                 </div>
@@ -203,6 +175,7 @@
                 @method('DELETE')
             </form>
         </div>
-    </div>
-</body>
-</html>
+    </section>
+</main>
+
+@include('behandelingen.partials.page-end')
