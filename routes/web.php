@@ -5,7 +5,7 @@ use App\Http\Controllers\MedewerkerController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('medewerkers.index');
 });
 
 Route::get('/dashboard', function () {
