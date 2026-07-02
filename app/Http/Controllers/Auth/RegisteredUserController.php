@@ -31,23 +31,34 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'voornaam' => ['required', 'string', 'min:2', 'max:255', 'regex:/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð\s\'-]+$/u'],
+            'achternaam' => ['required', 'string', 'min:2', 'max:255', 'regex:/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð\s\'-]+$/u'],
+            'email' => ['required', 'string', 'lowercase', 'email:rfc,dns', 'max:255', 'unique:'.User::class],
+            'telefoon' => ['nullable', 'regex:/^(06|\\+316)[0-9]{8}$/'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'rolename' => ['required', 'string', 'max:20'],
+        ], [
+            'voornaam.regex' => 'Voornaam mag alleen letters bevatten.',
+            'voornaam.min' => 'Voornaam moet minimaal 2 letters zijn.',
+            'achternaam.regex' => 'Achternaam mag alleen letters bevatten.',
+            'achternaam.min' => 'Achternaam moet minimaal 2 letters zijn.',
+            'telefoon.regex' => 'Telefoonnummer moet beginnen met 06 gevolgd door 8 cijfers (bijv. 0612345678).',
+            'email.email' => 'Voer een geldig e-mailadres in.',
         ]);
 
         $user = User::create([
-            'name' => $request->name,
+            'name' => $request->voornaam . ' ' . $request->achternaam,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'rolename' => $request->rolename,
+            'voornaam' => $request->voornaam,
+            'achternaam' => $request->achternaam,
+            'telefoon' => $request->telefoon,
+            'rolename' => 'klant',
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect()->route('profiel.index');
     }
 }

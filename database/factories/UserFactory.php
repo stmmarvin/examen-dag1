@@ -24,11 +24,18 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $voornaam = fake()->firstName();
+        $achternaam = fake()->lastName();
+        
         return [
-            'name' => fake()->name(),
+            'name' => $voornaam . ' ' . $achternaam,
+            'voornaam' => $voornaam,
+            'achternaam' => $achternaam,
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'telefoon' => '06' . fake()->numerify('########'),
+            'rolename' => 'klant',
             'remember_token' => Str::random(10),
         ];
     }
