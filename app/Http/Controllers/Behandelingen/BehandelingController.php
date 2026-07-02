@@ -84,6 +84,15 @@ class BehandelingController extends Controller
         ]);
     }
 
+    public function delete(Behandeling $behandeling): View
+    {
+        // Bevestigingspagina voordat een behandeling wordt verwijderd.
+        return view('behandelingen.delete', [
+            'behandeling' => $behandeling,
+            'behandelingen' => Behandeling::query()->latest()->take(6)->get(),
+        ]);
+    }
+
     public function update(UpdateBehandelingRequest $request, Behandeling $behandeling): RedirectResponse
     {
         // Werkt een bestaande behandeling bij.
