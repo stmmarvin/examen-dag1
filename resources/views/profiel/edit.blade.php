@@ -74,7 +74,7 @@
                                 Geboortedatum
                             </label>
                             <input id="geboortedatum" type="date" name="geboortedatum" value="{{ old('geboortedatum', $user->geboortedatum) }}" 
-                                   max="{{ date('Y-m-d') }}"
+                                   min="1900-01-01" max="{{ date('Y-m-d') }}"
                                    class="w-full rounded-md border-2 border-[#d7c39a] px-4 py-3 focus:border-[#c69a3e] focus:outline-none">
                             @error('geboortedatum')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

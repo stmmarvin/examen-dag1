@@ -57,9 +57,9 @@ class AppointmentController extends Controller
 
         $appointments = $query->paginate(10);
 
-        $employees = Employee::all();
+        $employees = User::where('rolename', 'medewerker')->get();
         $clients = Client::all();
-        $treatments = Treatment::all();
+        $treatments = Behandeling::where('actief', true)->get();
 
         return view('appointments.overview', compact('appointments', 'employees', 'clients', 'treatments'));
     }
@@ -72,16 +72,16 @@ class AppointmentController extends Controller
         // Get behandelingen instead of treatments
         $treatments = Behandeling::where('actief', true)->orderBy('naam')->get();
         
-        // Get or create client for logged in user
-        $client = Client::firstOrCreate(
-            ['user_id' => auth()->id()],
-            [
-                'first_name' => auth()->user()->voornaam ?? auth()->user()->name,
-                'last_name' => auth()->user()->achternaam ?? '',
-                'phone' => auth()->user()->telefoon ?? auth()->user()->email,
-                'email' => auth()->user()->email,
-            ]
-        );
+        // Get or create client for logged in user - ONLY create, don't update existing
+        $client = Client::firstOrNew(['user_id' => auth()->id()]);
+        
+        if (!$client->exists) {
+            $client->first_name = auth()->user()->voornaam ?? auth()->user()->name;
+            $client->last_name = auth()->user()->achternaam ?? '';
+            $client->phone = auth()->user()->telefoon ?? auth()->user()->email;
+            $client->email = auth()->user()->email;
+            $client->save();
+        }
         
         return view('appointments.create-as-client', compact('employees', 'treatments', 'client'));
     }
@@ -120,8 +120,8 @@ class AppointmentController extends Controller
             ->orderBy('appointment_date', 'desc')
             ->paginate(10);
             
-        $employees = Employee::all();
-        $treatments = Treatment::all();
+        $employees = User::where('rolename', 'medewerker')->get();
+        $treatments = Behandeling::where('actief', true)->get();
         
         return view('appointments.edit-as-client', compact('appointments', 'employees', 'treatments'));
     }
@@ -129,8 +129,8 @@ class AppointmentController extends Controller
     public function create()
     {
         $clients = Client::orderBy('last_name')->get();
-        $employees = Employee::orderBy('name')->get();
-        $treatments = Treatment::orderBy('name')->get();
+        $employees = User::where('rolename', 'medewerker')->orderBy('name')->get();
+        $treatments = Behandeling::where('actief', true)->orderBy('naam')->get();
 
         return view('appointments.create', compact('clients', 'employees', 'treatments'));
     }
@@ -139,8 +139,8 @@ class AppointmentController extends Controller
     {
         $validated = $request->validate([
             'client_id' => 'required|exists:clients,id',
-            'employee_id' => 'required|exists:employees,id',
-            'treatment_id' => 'required|exists:treatments,id',
+            'employee_id' => 'required|exists:users,id',
+            'treatment_id' => 'required|exists:behandelingen,id',
             'appointment_date' => 'required|date|after_or_equal:today',
             'appointment_time' => 'required',
             'notes' => 'nullable|string',
@@ -153,7 +153,7 @@ class AppointmentController extends Controller
             'appointment_time.required' => 'Selecteer een tijd.',
         ]);
 
-        $treatment = Treatment::findOrFail($validated['treatment_id']);
+        $treatment = Behandeling::findOrFail($validated['treatment_id']);
         
         $appointmentDateTime = $validated['appointment_date'] . ' ' . $validated['appointment_time'];
 
@@ -163,7 +163,7 @@ class AppointmentController extends Controller
             'employee_id' => $validated['employee_id'],
             'treatment_id' => $validated['treatment_id'],
             'appointment_date' => $appointmentDateTime,
-            'duration_minutes' => $treatment->duration_minutes,
+            'duration_minutes' => $treatment->duur_minuten,
             'status' => 'bevestigd',
             'notes' => $validated['notes'] ?? null,
         ]);
@@ -181,8 +181,8 @@ class AppointmentController extends Controller
     public function edit(Appointment $appointment)
     {
         $clients = Client::orderBy('last_name')->get();
-        $employees = Employee::orderBy('name')->get();
-        $treatments = Treatment::orderBy('name')->get();
+        $employees = User::where('rolename', 'medewerker')->orderBy('name')->get();
+        $treatments = Behandeling::where('actief', true)->orderBy('naam')->get();
 
         return view('appointments.edit', compact('appointment', 'clients', 'employees', 'treatments'));
     }
@@ -200,8 +200,8 @@ class AppointmentController extends Controller
         
         $validated = $request->validate([
             'client_id' => 'required|exists:clients,id',
-            'employee_id' => 'required|exists:employees,id',
-            'treatment_id' => 'required|exists:treatments,id',
+            'employee_id' => 'required|exists:users,id',
+            'treatment_id' => 'required|exists:behandelingen,id',
             'appointment_date' => 'required|date',
             'appointment_time' => 'required',
             'status' => 'required|in:bevestigd,in afwachting,geannuleerd,voltooid',
@@ -214,7 +214,7 @@ class AppointmentController extends Controller
             'appointment_time.required' => 'Selecteer een tijd.',
         ]);
 
-        $treatment = Treatment::findOrFail($validated['treatment_id']);
+        $treatment = Behandeling::findOrFail($validated['treatment_id']);
         
         $appointmentDateTime = $validated['appointment_date'] . ' ' . $validated['appointment_time'];
 
@@ -224,7 +224,7 @@ class AppointmentController extends Controller
             'employee_id' => $validated['employee_id'],
             'treatment_id' => $validated['treatment_id'],
             'appointment_date' => $appointmentDateTime,
-            'duration_minutes' => $treatment->duration_minutes,
+            'duration_minutes' => $treatment->duur_minuten,
             'status' => $validated['status'],
             'notes' => $validated['notes'],
         ]);
