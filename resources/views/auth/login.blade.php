@@ -44,11 +44,24 @@
                 <span class="ms-2">Ingelogd blijven</span>
             </label>
 
-            @if (Route::has('password.request'))
-                <a class="text-sm font-semibold text-[#10213D] underline-offset-4 hover:underline" href="{{ route('password.request') }}">
-                    Wachtwoord vergeten?
-                </a>
-            @endif
+        <div class="flex items-center justify-between mt-4">
+            <div class="flex items-center gap-4">
+                @if (Route::has('password.request'))
+                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2" style="--tw-ring-color: #B8935A;" href="{{ route('password.request') }}">
+                        {{ __('Wachtwoord vergeten?') }}
+                    </a>
+                @endif
+
+                @if (Route::has('register'))
+                    <a class="underline text-sm hover:opacity-75 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2" style="color: #B8935A; --tw-ring-color: #B8935A;" href="{{ route('register') }}">
+                        Nog geen account? Registreer
+                    </a>
+                @endif
+            </div>
+
+            <x-primary-button class="ms-3">
+                {{ __('Inloggen') }}
+            </x-primary-button>
         </div>
 
         <button class="w-full rounded bg-[#10213D] px-5 py-3 text-sm font-bold text-white hover:bg-[#1b3158]">

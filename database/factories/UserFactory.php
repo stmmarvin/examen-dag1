@@ -32,6 +32,7 @@ class UserFactory extends Factory
             // Dag 2 gebruikt de rol Eigenaar voor beheerfunctionaliteit.
             'rolename' => 'eigenaar',
             'remember_token' => Str::random(10),
+            'rolename' => 'client', // Default role for testing
         ];
     }
 

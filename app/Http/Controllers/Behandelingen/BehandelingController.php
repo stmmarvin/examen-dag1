@@ -1,0 +1,145 @@
+<?php
+
+namespace App\Http\Controllers\Behandelingen;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Behandelingen\StoreBehandelingRequest;
+use App\Http\Requests\Behandelingen\UpdateBehandelingRequest;
+use App\Models\Behandelingen\Behandeling;
+use App\Support\Behandelingen\BehandelingKeuzes;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
+
+class BehandelingController extends Controller
+{
+    // Laat alle behandelingen zien met zoeken en filteren.
+    public function index(Request $request): View
+    {
+        $zoekterm = trim((string) $request->query('zoek'));
+        $type = trim((string) $request->query('type'));
+        $sortering = (string) $request->query('sorteer', 'meest_populair');
+
+        // Deze types worden gebruikt voor de filter dropdown.
+        $types = Behandeling::query()
+            ->select('type')
+            ->distinct()
+            ->orderBy('type')
+            ->pluck('type');
+
+        // Hier worden zoekterm en type-filter toegepast op de lijst.
+        $query = Behandeling::query()
+            ->when($zoekterm !== '', function ($query) use ($zoekterm) {
+                $query->where(function ($query) use ($zoekterm) {
+                    $query->where('naam', 'like', "%{$zoekterm}%")
+                        ->orWhere('type', 'like', "%{$zoekterm}%")
+                        ->orWhere('beschrijving', 'like', "%{$zoekterm}%");
+                });
+            })
+            ->when($type !== '', fn ($query) => $query->where('type', $type));
+
+        match ($sortering) {
+            'naam_az' => $query->orderBy('naam'),
+            'prijs_laag_hoog' => $query->orderBy('prijs')->orderBy('naam'),
+            default => $query->latest(),
+        };
+
+        $behandelingen = $query
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('behandelingen.index', [
+            'behandelingen' => $behandelingen,
+            'types' => $types,
+            'zoekterm' => $zoekterm,
+            'geselecteerdType' => $type,
+            'geselecteerdeSortering' => $sortering,
+        ]);
+    }
+
+    public function create(): View
+    {
+        // Leeg formulier met standaard keuzes voor behandelingen.
+        return view('behandelingen.create', [
+            'behandeling' => new Behandeling(['actief' => true]),
+            'behandelingKeuzes' => BehandelingKeuzes::standaard(),
+        ]);
+    }
+
+    public function store(StoreBehandelingRequest $request): RedirectResponse
+    {
+        // Slaat een nieuwe behandeling op na validatie.
+        $gegevens = $request->safe()->except('afbeelding');
+
+        if ($request->hasFile('afbeelding')) {
+            $gegevens['afbeelding_pad'] = $request->file('afbeelding')->store('behandelingen', 'public');
+        }
+
+        $behandeling = Behandeling::create($gegevens);
+
+        return redirect()
+            ->route('behandelingen.show', $behandeling)
+            ->with('status', 'Behandeling succesvol toegevoegd.');
+    }
+
+    public function show(Behandeling $behandeling): View
+    {
+        // Detailpagina van een behandeling.
+        return view('behandelingen.show', [
+            'behandeling' => $behandeling,
+        ]);
+    }
+
+    public function edit(Behandeling $behandeling): View
+    {
+        // Formulier om een bestaande behandeling aan te passen.
+        return view('behandelingen.edit', [
+            'behandeling' => $behandeling,
+            'behandelingKeuzes' => BehandelingKeuzes::standaard(),
+        ]);
+    }
+
+    public function delete(Behandeling $behandeling): View
+    {
+        // Bevestigingspagina voordat een behandeling wordt verwijderd.
+        return view('behandelingen.delete', [
+            'behandeling' => $behandeling,
+            'behandelingen' => Behandeling::query()->latest()->take(6)->get(),
+        ]);
+    }
+
+    public function update(UpdateBehandelingRequest $request, Behandeling $behandeling): RedirectResponse
+    {
+        // Werkt een bestaande behandeling bij.
+        $gegevens = $request->safe()->except('afbeelding');
+
+        if ($request->hasFile('afbeelding')) {
+            if ($behandeling->afbeelding_pad) {
+                Storage::disk('public')->delete($behandeling->afbeelding_pad);
+            }
+
+            $gegevens['afbeelding_pad'] = $request->file('afbeelding')->store('behandelingen', 'public');
+        }
+
+        $behandeling->update($gegevens);
+
+        return redirect()
+            ->route('behandelingen.show', $behandeling)
+            ->with('status', 'Behandeling succesvol gewijzigd.');
+    }
+
+    public function destroy(Behandeling $behandeling): RedirectResponse
+    {
+        // Verwijdert de gekozen behandeling.
+        if ($behandeling->afbeelding_pad) {
+            Storage::disk('public')->delete($behandeling->afbeelding_pad);
+        }
+
+        $behandeling->delete();
+
+        return redirect()
+            ->route('behandelingen.index')
+            ->with('status', 'Behandeling succesvol verwijderd.');
+    }
+}

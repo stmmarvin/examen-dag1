@@ -10,10 +10,11 @@ class ExampleTest extends TestCase
     /**
      * A basic test example.
      */
-    public function test_the_application_redirects_to_medewerkers(): void
+    public function test_the_application_returns_a_successful_response(): void
     {
         $response = $this->get('/');
 
-        $response->assertRedirect(route('medewerkers.index', absolute: false));
+        // Homepage redirects to dashboard which requires auth
+        $response->assertRedirect(route('dashboard'));
     }
 }
