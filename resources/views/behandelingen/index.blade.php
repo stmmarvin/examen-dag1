@@ -43,7 +43,6 @@
         </select>
 
         <div class="flex gap-3">
-            <button type="submit" class="h-12 rounded-xl border border-slate-200 bg-white shadow-sm px-5 text-sm font-bold text-slate-950 hover:bg-[#f8f4ea]">Meer filters</button>
             <a href="{{ route('behandelingen.index') }}" class="flex h-12 items-center rounded-xl border border-slate-200 bg-white shadow-sm px-5 text-sm font-bold text-slate-950 hover:bg-[#f8f4ea]">Reset</a>
         </div>
     </form>
@@ -119,5 +118,23 @@
         @endif
     </div>
 </main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const formulier = document.querySelector('form[action="{{ route('behandelingen.index') }}"]');
+        const zoekveld = formulier?.querySelector('input[name="zoek"]');
+        const dropdowns = formulier?.querySelectorAll('select');
+        let zoekTimer;
+
+        zoekveld?.addEventListener('input', () => {
+            clearTimeout(zoekTimer);
+            zoekTimer = setTimeout(() => formulier.submit(), 350);
+        });
+
+        dropdowns?.forEach((dropdown) => {
+            dropdown.addEventListener('change', () => formulier.submit());
+        });
+    });
+</script>
 
 @include('behandelingen.partials.page-end')
