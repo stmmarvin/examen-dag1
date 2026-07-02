@@ -37,7 +37,7 @@
                     </div>
                 @endif
 
-                <div class="mt-7 rounded-2xl border border-amber-300 bg-amber-50 px-6 py-5 text-sm text-amber-950 shadow-sm">
++                <div class="mt-7 rounded-2xl border border-amber-300 bg-amber-50 px-6 py-5 text-sm text-amber-950 shadow-sm">
                     <div class="flex items-start gap-4">
                         <span class="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-200 text-base font-bold text-amber-900">!</span>
                         <div>

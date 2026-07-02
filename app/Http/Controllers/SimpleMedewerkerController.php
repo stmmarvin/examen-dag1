@@ -144,7 +144,7 @@ class SimpleMedewerkerController extends Controller
         $hasAppointments = $this->heeftToekomstigeAfspraken($resolved['model'], $resolved['source']);
             
         if ($hasAppointments) {
-            return back()->with('error', 'Deze medewerker heeft nog toekomstige afspraken en kan niet worden verwijderd.');
+            return back()->with('error', 'Deze medewerker kan niet worden verwijderd omdat er nog afspraken gepland staan');
         }
 
         $resolved['model']->delete();

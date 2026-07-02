@@ -58,7 +58,7 @@
                             <option value="">Selecteer een behandeling...</option>
                             @foreach($treatments as $treatment)
                                 <option value="{{ $treatment->id }}">
-                                    {{ $treatment->naam }} - €{{ number_format($treatment->prijs, 2) }} ({{ $treatment->duur_minuten }} min)
+                                    {{ $treatment->name }} - €{{ number_format($treatment->price, 2) }} ({{ $treatment->duration_minutes }} min)
                                 </option>
                             @endforeach
                         </select>
