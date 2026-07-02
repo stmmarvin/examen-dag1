@@ -1,22 +1,11 @@
 <x-app-layout>
     <div class="flex min-h-[calc(100vh-76px)]">
-        @include('medewerkers.partials.sidebar', ['active' => 'edit'])
+        @include('medewerkers.partials.sidebar', ['active' => 'edit', 'actieMedewerker' => $medewerker])
 
         <section class="flex-1 px-10 py-9">
             @include('medewerkers.partials.flash')
 
-            @php
-                $isEigenaarAccount = strtolower((string) $medewerker->gebruiker->email) === 'eigenaar@kniplokettiko.nl';
-            @endphp
-
-            <div class="flex items-start justify-between">
-                <a href="{{ route('medewerkers.index', ['medewerker' => $medewerker->id]) }}" class="text-sm">← Terug naar medewerkers</a>
-                @unless ($isEigenaarAccount)
-                    <a href="{{ route('medewerkers.delete', $medewerker) }}" class="rounded border border-gray-400 px-6 py-3 text-sm font-bold text-red-600">
-                        Medewerker verwijderen
-                    </a>
-                @endunless
-            </div>
+            <a href="{{ route('medewerkers.index', ['medewerker' => $medewerker->id]) }}" class="text-sm">← Terug naar medewerkers</a>
 
             <div class="mt-20">
                 <h1 class="text-3xl font-bold">Medewerkergegevens bewerken</h1>

@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="flex min-h-[calc(100vh-76px)]">
-        @include('medewerkers.partials.sidebar', ['active' => 'delete'])
+        @include('medewerkers.partials.sidebar', ['active' => 'delete', 'actieMedewerker' => $medewerker])
 
         <section class="min-w-0 flex-1 px-10 py-9">
             @include('medewerkers.partials.flash')

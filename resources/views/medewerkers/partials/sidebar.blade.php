@@ -1,5 +1,8 @@
 @php
     $active = $active ?? 'index';
+    $actieMedewerker = $actieMedewerker ?? null;
+    $isEigenaarAccount = $actieMedewerker
+        && strtolower((string) $actieMedewerker->gebruiker?->email) === 'eigenaar@kniplokettiko.nl';
 @endphp
 
 <aside class="flex w-[270px] shrink-0 flex-col border-r border-gray-400 px-6 py-6">
@@ -9,18 +12,38 @@
     </div>
 
     <nav class="mt-7 space-y-2 text-sm font-bold">
-        <!-- De sidebar blijft navigatie; acties staan bij de medewerker waar ze context hebben. -->
+        <!-- De actieknoppen staan hier centraal, zoals in het wireframe. -->
         <a href="{{ route('medewerkers.index') }}" class="flex items-center gap-5 rounded px-4 py-4 {{ $active === 'index' ? 'bg-gray-200' : '' }}">
             <span class="text-lg">⊙</span>
             <span>Alle medewerkers</span>
         </a>
+        <a href="{{ route('medewerkers.create') }}" class="flex items-center gap-5 rounded px-4 py-4 {{ $active === 'create' ? 'bg-gray-200' : '' }}">
+            <span class="text-xl">+</span>
+            <span>Nieuwe medewerker</span>
+        </a>
+
+        @if ($actieMedewerker)
+            <a href="{{ route('medewerkers.edit', $actieMedewerker) }}" class="flex items-center gap-5 rounded px-4 py-4 {{ $active === 'edit' ? 'bg-gray-200' : '' }}">
+                <span class="text-lg">✎</span>
+                <span>Medewerker bewerken</span>
+            </a>
+
+            @unless ($isEigenaarAccount)
+                <a href="{{ route('medewerkers.delete', $actieMedewerker) }}" class="flex items-center gap-5 rounded px-4 py-4 {{ $active === 'delete' ? 'bg-gray-200' : '' }}">
+                    <span class="text-lg">▱</span>
+                    <span>Medewerker verwijderen</span>
+                </a>
+            @endunless
+        @else
+            <span class="flex cursor-not-allowed items-center gap-5 rounded px-4 py-4 text-gray-400">
+                <span class="text-lg">✎</span>
+                <span>Medewerker bewerken</span>
+            </span>
+            <span class="flex cursor-not-allowed items-center gap-5 rounded px-4 py-4 text-gray-400">
+                <span class="text-lg">▱</span>
+                <span>Medewerker verwijderen</span>
+            </span>
+        @endif
     </nav>
 
-    <div class="mt-auto rounded border border-gray-400 p-5 text-sm">
-        <h2 class="font-bold">Hulp nodig?</h2>
-        <p class="mt-3 leading-tight">Bekijk de handleiding of neem contact op met support.</p>
-        <button type="button" class="mt-7 w-full rounded border border-gray-400 px-4 py-3 font-bold">
-            Naar helpcentrum
-        </button>
-    </div>
 </aside>

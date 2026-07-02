@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="flex min-h-[calc(100vh-76px)]">
-        @include('medewerkers.partials.sidebar', ['active' => 'index'])
+        @include('medewerkers.partials.sidebar', ['active' => 'index', 'actieMedewerker' => $geselecteerdeMedewerker])
 
         <section class="min-w-0 flex-1 px-10 py-9">
             @include('medewerkers.partials.flash')
@@ -14,9 +14,6 @@
                 <form method="GET" action="{{ route('medewerkers.index') }}" class="flex flex-wrap gap-4">
                     <!-- Zoek op naam, telefoon, e-mail, personeelsnummer of functie. -->
                     <input name="zoek" value="{{ $zoekterm }}" placeholder="Zoek medewerker op naam, telefoon of e-mail..." class="h-11 w-full rounded border-gray-400 sm:w-[440px]">
-                    <a href="{{ route('medewerkers.create') }}" class="flex h-11 items-center rounded bg-black px-5 text-sm font-bold text-white">
-                        + Nieuwe medewerker
-                    </a>
                 </form>
             </div>
 
@@ -41,10 +38,6 @@
 
                 <div class="min-w-0 px-6 py-6">
                     @if ($geselecteerdeMedewerker)
-                        @php
-                            $isEigenaarAccount = strtolower((string) $geselecteerdeMedewerker->gebruiker->email) === 'eigenaar@kniplokettiko.nl';
-                        @endphp
-
                         <div class="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
                             <div class="flex min-w-0 gap-6">
                                 <span class="h-20 w-20 rounded-full border border-black"></span>
@@ -58,17 +51,6 @@
                                         {{ optional($geselecteerdeMedewerker->in_dienst_sinds)->translatedFormat('d F Y') ?? 'Onbekend' }}
                                     </p>
                                 </div>
-                            </div>
-
-                            <div class="flex shrink-0 flex-wrap gap-3">
-                                <a href="{{ route('medewerkers.edit', $geselecteerdeMedewerker) }}" class="rounded border border-gray-400 px-10 py-3 text-sm font-bold">
-                                    Wijzigen
-                                </a>
-                                @unless ($isEigenaarAccount)
-                                    <a href="{{ route('medewerkers.delete', $geselecteerdeMedewerker) }}" class="rounded border border-gray-400 px-8 py-3 text-sm font-bold text-red-600">
-                                        Verwijderen
-                                    </a>
-                                @endunless
                             </div>
                         </div>
 
