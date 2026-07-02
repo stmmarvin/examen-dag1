@@ -18,8 +18,10 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            // Manager-account waarmee de beoordelaar direct de CRUD kan testen.
+            'name' => 'Manager Kniploket Tiko',
+            'email' => 'manager@kniplokettiko.nl',
+            'rolename' => 'manager',
         ]);
     }
 }
