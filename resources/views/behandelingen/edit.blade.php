@@ -23,9 +23,10 @@
                     <h2 class="text-lg font-bold text-slate-950">Afbeelding</h2>
                     <div class="mt-5 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
                         @if ($behandeling->afbeelding_pad)
-                            <img src="{{ asset('storage/'.$behandeling->afbeelding_pad) }}" alt="{{ $behandeling->naam }}" class="h-64 w-full object-cover">
+                            <img id="afbeelding-preview" src="{{ asset('storage/'.$behandeling->afbeelding_pad) }}" alt="{{ $behandeling->naam }}" class="h-64 w-full object-cover">
                         @else
-                            <div class="flex h-64 items-center justify-center bg-[#f8f4ea] text-sm font-bold text-slate-600">Geen afbeelding ingesteld</div>
+                            <img id="afbeelding-preview" src="" alt="" class="hidden h-64 w-full object-cover">
+                            <div id="afbeelding-placeholder" class="flex h-64 items-center justify-center bg-[#f8f4ea] text-sm font-bold text-slate-600">Geen afbeelding ingesteld</div>
                         @endif
                     </div>
                     <input id="afbeelding" name="afbeelding" type="file" accept="image/jpeg,image/png,image/webp" class="mt-4 block w-full rounded border border-slate-300 bg-white px-3 py-2 text-sm text-slate-950 shadow-sm file:mr-4 file:rounded file:border-0 file:bg-[#0f1f3a] file:px-4 file:py-2 file:text-sm file:font-bold file:text-white">
@@ -61,5 +62,25 @@
         </form>
     </section>
 </main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const input = document.getElementById('afbeelding');
+        const preview = document.getElementById('afbeelding-preview');
+        const placeholder = document.getElementById('afbeelding-placeholder');
+
+        input?.addEventListener('change', () => {
+            const bestand = input.files?.[0];
+
+            if (!bestand) {
+                return;
+            }
+
+            preview.src = URL.createObjectURL(bestand);
+            preview.classList.remove('hidden');
+            placeholder?.classList.add('hidden');
+        });
+    });
+</script>
 
 @include('behandelingen.partials.page-end')

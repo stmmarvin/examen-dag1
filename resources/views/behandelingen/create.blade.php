@@ -19,8 +19,9 @@
 
                 <section class="rounded-xl border border-slate-200 bg-white shadow-sm p-5">
                     <h2 class="text-lg font-bold text-slate-950">Afbeelding <span class="text-sm font-normal">(optioneel)</span></h2>
-                    <label for="afbeelding" class="mt-5 flex min-h-[340px] cursor-pointer items-center justify-center rounded border-2 border-dashed border-slate-300 bg-white hover:border-[#c69a3e]">
-                        <div class="text-center">
+                    <label for="afbeelding" class="mt-5 flex min-h-[340px] cursor-pointer items-center justify-center overflow-hidden rounded border-2 border-dashed border-slate-300 bg-white hover:border-[#c69a3e]">
+                        <img id="afbeelding-preview" src="" alt="" class="hidden h-full min-h-[340px] w-full object-cover">
+                        <div id="afbeelding-placeholder" class="text-center">
                             <div class="mx-auto flex h-14 w-14 items-center justify-center rounded border border-[#0f1f3a] text-3xl text-[#0f1f3a]">+</div>
                             <p class="mt-6 text-sm font-bold text-slate-950">Klik om een afbeelding te uploaden</p>
                             <p class="mt-3 text-sm text-slate-600">of sleep een afbeelding hierheen</p>
@@ -39,5 +40,27 @@
         </form>
     </section>
 </main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const input = document.getElementById('afbeelding');
+        const preview = document.getElementById('afbeelding-preview');
+        const placeholder = document.getElementById('afbeelding-placeholder');
+
+        input?.addEventListener('change', () => {
+            const bestand = input.files?.[0];
+
+            if (!bestand) {
+                preview.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+                return;
+            }
+
+            preview.src = URL.createObjectURL(bestand);
+            preview.classList.remove('hidden');
+            placeholder.classList.add('hidden');
+        });
+    });
+</script>
 
 @include('behandelingen.partials.page-end')
