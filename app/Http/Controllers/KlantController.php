@@ -14,6 +14,21 @@ use Illuminate\View\View;
 class KlantController extends Controller
 {
     /**
+     * Display a listing of all klanten.
+     * 
+     * Returns klanten index view with all klanten from database.
+     * 
+     * Requirements: 3.1, 3.2, 4.1, 4.2, 4.3
+     */
+    public function index(): View
+    {
+        // Get all klanten with their gebruiker relationship (eager loading)
+        $klanten = Klant::with('gebruiker')->get();
+        
+        return view('klanten.index', compact('klanten'));
+    }
+
+    /**
      * Show the form for creating a new klant.
      * 
      * Requirements: 1.4
@@ -115,8 +130,8 @@ class KlantController extends Controller
      */
     public function edit(Klant $klant): View
     {
-        // Eager load the gebruiker relationship
-        $klant->load('gebruiker');
+        // Eager load the gebruiker and klantKenmerken relationships
+        $klant->load('gebruiker', 'klantKenmerken');
         
         return view('klanten.edit', compact('klant'));
     }

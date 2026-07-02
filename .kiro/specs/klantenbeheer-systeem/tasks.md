@@ -94,8 +94,8 @@ This implementation plan breaks down the Laravel 13 CRUD application for custome
     - Handle non-existent klant with error message
     - _Requirements: 7.2, 7.3, 8.1, 8.2, 8.3_
 
-- [ ] 4. Define routes with authentication middleware
-  - [-] 4.1 Register klanten resource routes in web.php
+- [x] 4. Define routes with authentication middleware
+  - [x] 4.1 Register klanten resource routes in web.php
     - Define RESTful routes for KlantController
     - Apply auth middleware to all klanten routes
     - _Requirements: 9.1, 9.2, 9.3_
@@ -106,7 +106,7 @@ This implementation plan breaks down the Laravel 13 CRUD application for custome
     - _Requirements: 9.1, 9.2, 9.3_
 
 - [ ] 5. Create Blade views for index and show
-  - [ ] 5.1 Create index.blade.php view
+  - [-] 5.1 Create index.blade.php view
     - Display table with voornaam, achternaam, email for all klanten
     - Add "Nieuwe klant" button linking to create form
     - Add action buttons (view, edit, delete) for each klant
@@ -114,7 +114,7 @@ This implementation plan breaks down the Laravel 13 CRUD application for custome
     - Add delete confirmation using JavaScript
     - _Requirements: 3.1, 3.2, 3.4, 4.1, 4.2, 4.3, 7.1_
   
-  - [ ] 5.2 Create show.blade.php view
+  - [-] 5.2 Create show.blade.php view
     - Display all klantgegevens in read-only format
     - Add Edit and Delete buttons
     - Add Back to list button
@@ -139,14 +139,14 @@ This implementation plan breaks down the Laravel 13 CRUD application for custome
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 7. Create Blade views for create and edit forms
-  - [ ] 7.1 Create create.blade.php view
+  - [-] 7.1 Create create.blade.php view
     - Build form with all klant fields (voornaam, achternaam, telefoonnummer, email, geboortedatum, adres, postcode, woonplaats, allergieen, wensen)
     - Add required field indicators for verplichte velden
     - Display validation errors using Breeze components
     - Add Save and Cancel buttons
     - _Requirements: 1.4, 2.1, 2.2_
   
-  - [ ] 7.2 Create edit.blade.php view
+  - [-] 7.2 Create edit.blade.php view
     - Build form identical to create form
     - Pre-fill form with current klant data
     - Display validation errors using Breeze components
