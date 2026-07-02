@@ -7,6 +7,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
 {
@@ -86,17 +87,25 @@ class DatabaseSeeder extends Seeder
 
             $gebruikerId = DB::table('gebruikers')->where('email', $medewerker[4])->value('id');
 
+            $medewerkerData = [
+                'gebruiker_id' => $gebruikerId,
+                'functie' => $medewerker[5],
+                'in_dienst_sinds' => $medewerker[7],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+            if (Schema::hasColumn('medewerkers', 'werkdagen')) {
+                $medewerkerData['werkdagen'] = 'Maandag t/m vrijdag';
+            }
+
+            if (Schema::hasColumn('medewerkers', 'werktijden')) {
+                $medewerkerData['werktijden'] = '09:00 - 17:00';
+            }
+
             DB::table('medewerkers')->updateOrInsert(
                 ['personeelsnummer' => $medewerker[0]],
-                [
-                    'gebruiker_id' => $gebruikerId,
-                    'functie' => $medewerker[5],
-                    'in_dienst_sinds' => $medewerker[7],
-                    'werkdagen' => 'Maandag t/m vrijdag',
-                    'werktijden' => '09:00 - 17:00',
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
+                $medewerkerData,
             );
 
             $medewerkerId = DB::table('medewerkers')->where('personeelsnummer', $medewerker[0])->value('id');
