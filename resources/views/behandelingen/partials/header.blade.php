@@ -12,12 +12,20 @@
         </nav>
 
         @auth
-            <a href="{{ route('profiel.index') }}" class="flex items-center gap-3 text-sm font-semibold text-[#0f1f3a] hover:text-[#c69a3e]">
-                <span class="flex h-9 w-9 items-center justify-center rounded-full border border-[#0f1f3a] bg-[#f8f4ea]">
-                    <span class="h-2 w-2 rounded-full bg-[#c69a3e]"></span>
-                </span>
-                <span>{{ Auth::user()->name }}</span>
-            </a>
+            <div class="flex items-center gap-4">
+                <a href="{{ route('profiel.index') }}" class="flex items-center gap-3 text-sm font-semibold text-[#0f1f3a] hover:text-[#c69a3e]">
+                    <span class="flex h-9 w-9 items-center justify-center rounded-full border border-[#0f1f3a] bg-[#f8f4ea]">
+                        <span class="h-2 w-2 rounded-full bg-[#c69a3e]"></span>
+                    </span>
+                    <span>{{ Auth::user()->name }}</span>
+                </a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="text-sm font-semibold text-[#0f1f3a] hover:text-[#c69a3e]">
+                        Uitloggen
+                    </button>
+                </form>
+            </div>
         @else
             <a href="{{ route('login') }}" class="flex items-center gap-3 text-sm font-semibold text-[#0f1f3a] hover:text-[#c69a3e]">
                 <span class="flex h-9 w-9 items-center justify-center rounded-full border border-[#0f1f3a] bg-[#f8f4ea]">
