@@ -69,6 +69,8 @@
                             E-mailadres <span class="text-red-500">*</span>
                         </label>
                         <input id="email" type="email" name="email" value="{{ old('email') }}" required 
+                               pattern=".+@(outlook\.nl|hotmail\.(com|nl)|gmail\.com)"
+                               title="Email moet eindigen op @outlook.nl, @hotmail.com, @hotmail.nl of @gmail.com"
                                class="w-full px-4 py-3 border-2 border-slate-200 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-slate-900 transition">
                         @error('email')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -123,6 +125,33 @@
                         </a>
                     </div>
                 </form>
+
+                <script>
+                    // Voornaam en achternaam validatie - alleen letters
+                    ['voornaam', 'achternaam'].forEach(function(fieldId) {
+                        document.getElementById(fieldId).addEventListener('input', function(e) {
+                            let value = e.target.value;
+                            value = value.replace(/[^a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ\s\'-]/g, '');
+                            e.target.value = value;
+                        });
+                    });
+
+                    // Telefoon validatie - alleen cijfers
+                    document.getElementById('telefoon').addEventListener('input', function(e) {
+                        let value = e.target.value;
+                        // Verwijder alles behalve cijfers en +
+                        value = value.replace(/[^0-9+]/g, '');
+                        // Als het begint met 06, mag het maximaal 10 karakters zijn
+                        if (value.startsWith('06') && value.length > 10) {
+                            value = value.substring(0, 10);
+                        }
+                        // Als het begint met +316, mag het maximaal 12 karakters zijn
+                        if (value.startsWith('+316') && value.length > 12) {
+                            value = value.substring(0, 12);
+                        }
+                        e.target.value = value;
+                    });
+                </script>
             </div>
         </div>
     </div>

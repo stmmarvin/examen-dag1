@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profiel', [App\Http\Controllers\KlantProfielController::class, 'index'])->name('profiel.index');
     Route::get('/profiel/bewerken', [App\Http\Controllers\KlantProfielController::class, 'edit'])->name('profiel.edit');
     Route::patch('/profiel', [App\Http\Controllers\KlantProfielController::class, 'update'])->name('profiel.update');
+    Route::post('/profiel/delete-confirm', [App\Http\Controllers\KlantProfielController::class, 'deleteConfirm'])->name('profiel.delete-confirm');
     Route::delete('/profiel', [App\Http\Controllers\KlantProfielController::class, 'destroy'])->name('profiel.destroy');
 });
 

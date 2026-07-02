@@ -33,16 +33,17 @@ class RegisteredUserController extends Controller
         $request->validate([
             'voornaam' => ['required', 'string', 'min:2', 'max:255', 'regex:/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð\s\'-]+$/u'],
             'achternaam' => ['required', 'string', 'min:2', 'max:255', 'regex:/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð\s\'-]+$/u'],
-            'email' => ['required', 'string', 'lowercase', 'email:rfc,dns', 'max:255', 'unique:'.User::class],
-            'telefoon' => ['nullable', 'regex:/^(06|\\+316)[0-9]{8}$/'],
+            'email' => ['required', 'string', 'lowercase', 'email:rfc,dns', 'max:255', 'unique:'.User::class, 'regex:/^.+@(outlook\.nl|hotmail\.(com|nl)|gmail\.com)$/i'],
+            'telefoon' => ['nullable', 'regex:/^(06|\+316)[0-9]{8}$/'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ], [
             'voornaam.regex' => 'Voornaam mag alleen letters bevatten.',
             'voornaam.min' => 'Voornaam moet minimaal 2 letters zijn.',
             'achternaam.regex' => 'Achternaam mag alleen letters bevatten.',
             'achternaam.min' => 'Achternaam moet minimaal 2 letters zijn.',
-            'telefoon.regex' => 'Telefoonnummer moet beginnen met 06 gevolgd door 8 cijfers (bijv. 0612345678).',
+            'telefoon.regex' => 'Telefoonnummer moet een Nederlands nummer zijn (06... of +316...).',
             'email.email' => 'Voer een geldig e-mailadres in.',
+            'email.regex' => 'Email moet eindigen op @outlook.nl, @hotmail.com, @hotmail.nl of @gmail.com',
         ]);
 
         $user = User::create([
