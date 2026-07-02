@@ -1,5 +1,5 @@
 <header class="border-b border-gray-400 bg-white">
-    <div class="mx-auto flex h-24 max-w-7xl items-center justify-between px-6">
+    <div class="flex h-24 w-full items-center justify-between px-10">
         <a href="{{ route('behandelingen.index') }}" class="flex items-center gap-4">
             <span class="relative block h-12 w-12 border border-gray-900">
                 <span class="absolute left-0 top-1/2 h-px w-full -rotate-45 bg-gray-900"></span>

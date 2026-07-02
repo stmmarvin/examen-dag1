@@ -1,5 +1,5 @@
 <footer class="border-t border-gray-400 bg-white">
-    <div class="mx-auto grid max-w-7xl gap-10 px-6 py-8 md:grid-cols-[1.4fr_1fr_1fr_1fr_1.2fr]">
+    <div class="grid w-full gap-10 px-10 py-8 md:grid-cols-[1.4fr_1fr_1fr_1fr_1.2fr]">
         <div>
             <span class="relative block h-12 w-12 border border-gray-900">
                 <span class="absolute left-0 top-1/2 h-px w-full -rotate-45 bg-gray-900"></span>
