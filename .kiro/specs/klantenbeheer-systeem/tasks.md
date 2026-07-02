@@ -105,8 +105,8 @@ This implementation plan breaks down the Laravel 13 CRUD application for custome
     - Test authenticated users can access all routes
     - _Requirements: 9.1, 9.2, 9.3_
 
-- [ ] 5. Create Blade views for index and show
-  - [-] 5.1 Create index.blade.php view
+- [x] 5. Create Blade views for index and show
+  - [x] 5.1 Create index.blade.php view
     - Display table with voornaam, achternaam, email for all klanten
     - Add "Nieuwe klant" button linking to create form
     - Add action buttons (view, edit, delete) for each klant
@@ -114,7 +114,7 @@ This implementation plan breaks down the Laravel 13 CRUD application for custome
     - Add delete confirmation using JavaScript
     - _Requirements: 3.1, 3.2, 3.4, 4.1, 4.2, 4.3, 7.1_
   
-  - [-] 5.2 Create show.blade.php view
+  - [x] 5.2 Create show.blade.php view
     - Display all klantgegevens in read-only format
     - Add Edit and Delete buttons
     - Add Back to list button
@@ -138,15 +138,15 @@ This implementation plan breaks down the Laravel 13 CRUD application for custome
 - [ ] 6. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 7. Create Blade views for create and edit forms
-  - [-] 7.1 Create create.blade.php view
+- [x] 7. Create Blade views for create and edit forms
+  - [x] 7.1 Create create.blade.php view
     - Build form with all klant fields (voornaam, achternaam, telefoonnummer, email, geboortedatum, adres, postcode, woonplaats, allergieen, wensen)
     - Add required field indicators for verplichte velden
     - Display validation errors using Breeze components
     - Add Save and Cancel buttons
     - _Requirements: 1.4, 2.1, 2.2_
   
-  - [-] 7.2 Create edit.blade.php view
+  - [x] 7.2 Create edit.blade.php view
     - Build form identical to create form
     - Pre-fill form with current klant data
     - Display validation errors using Breeze components
@@ -198,29 +198,29 @@ This implementation plan breaks down the Laravel 13 CRUD application for custome
     - _Requirements: 7.2, 7.3, 7.4, 7.5, 8.1, 8.2, 8.3_
 
 - [ ] 11. Add error handling and user feedback
-  - [ ] 11.1 Implement flash messages for success operations
+  - [-] 11.1 Implement flash messages for success operations
     - Add success messages for create, update, delete operations
     - Use Laravel session flash with Breeze notification component
     - _Requirements: 1.1, 5.2, 7.2_
   
-  - [ ] 11.2 Implement error handling for database operations
+  - [-] 11.2 Implement error handling for database operations
     - Catch QueryException in controller methods
     - Display generic error message to users
     - Log error details for debugging
     - _Requirements: 2.2, 6.2, 8.1_
   
-  - [ ] 11.3 Handle 404 errors for non-existent klanten
+  - [-] 11.3 Handle 404 errors for non-existent klanten
     - Verify route model binding handles missing klanten
     - Add custom "Klant niet gevonden" message for delete operations
     - _Requirements: 8.1, 8.2, 8.3_
 
 - [ ] 12. Final integration and polish
-  - [ ] 12.1 Add navigation links to Breeze layout
+  - [-] 12.1 Add navigation links to Breeze layout
     - Add "Klantenoverzicht" link to main navigation
     - Ensure consistent styling with Breeze components
     - _Requirements: 3.1_
   
-  - [ ] 12.2 Verify delete confirmation dialog
+  - [-] 12.2 Verify delete confirmation dialog
     - Test JavaScript confirmation appears with correct message
     - Ensure cancel preserves klant, confirm deletes klant
     - _Requirements: 7.1, 7.4, 7.5_
