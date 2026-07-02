@@ -11,16 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('gebruikers', function (Blueprint $table) {
+        Schema::create('klant_kenmerken', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('rol_id')->default(2); // 2 = klant role
-            $table->string('voornaam');
-            $table->string('achternaam');
-            $table->string('email')->unique();
-            $table->string('telefoon');
-            $table->string('wachtwoord');
+            $table->foreignId('klant_id')->constrained('klanten')->onDelete('cascade');
+            $table->string('type'); // 'allergie' or 'wens'
+            $table->text('beschrijving');
             $table->boolean('actief')->default(true);
-            $table->timestamp('laatste_login')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('gebruikers');
+        Schema::dropIfExists('klant_kenmerken');
     }
 };
