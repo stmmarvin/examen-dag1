@@ -135,7 +135,7 @@ This implementation plan breaks down the Laravel 13 CRUD application for custome
     - Test non-existent klant returns 404
     - _Requirements: 3.3_
 
-- [ ] 6. Checkpoint - Ensure all tests pass
+- [-] 6. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 - [x] 7. Create Blade views for create and edit forms
@@ -197,30 +197,30 @@ This implementation plan breaks down the Laravel 13 CRUD application for custome
     - Test attempting to delete non-existent klant shows "Klant niet gevonden"
     - _Requirements: 7.2, 7.3, 7.4, 7.5, 8.1, 8.2, 8.3_
 
-- [ ] 11. Add error handling and user feedback
-  - [-] 11.1 Implement flash messages for success operations
+- [x] 11. Add error handling and user feedback
+  - [x] 11.1 Implement flash messages for success operations
     - Add success messages for create, update, delete operations
     - Use Laravel session flash with Breeze notification component
     - _Requirements: 1.1, 5.2, 7.2_
   
-  - [-] 11.2 Implement error handling for database operations
+  - [x] 11.2 Implement error handling for database operations
     - Catch QueryException in controller methods
     - Display generic error message to users
     - Log error details for debugging
     - _Requirements: 2.2, 6.2, 8.1_
   
-  - [-] 11.3 Handle 404 errors for non-existent klanten
+  - [x] 11.3 Handle 404 errors for non-existent klanten
     - Verify route model binding handles missing klanten
     - Add custom "Klant niet gevonden" message for delete operations
     - _Requirements: 8.1, 8.2, 8.3_
 
-- [ ] 12. Final integration and polish
-  - [-] 12.1 Add navigation links to Breeze layout
+- [x] 12. Final integration and polish
+  - [x] 12.1 Add navigation links to Breeze layout
     - Add "Klantenoverzicht" link to main navigation
     - Ensure consistent styling with Breeze components
     - _Requirements: 3.1_
   
-  - [-] 12.2 Verify delete confirmation dialog
+  - [x] 12.2 Verify delete confirmation dialog
     - Test JavaScript confirmation appears with correct message
     - Ensure cancel preserves klant, confirm deletes klant
     - _Requirements: 7.1, 7.4, 7.5_
