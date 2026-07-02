@@ -8,16 +8,20 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('clients', function (Blueprint $table) {
-            $table->foreignId('user_id')->nullable()->after('id')->constrained()->onDelete('cascade');
-        });
+        if (! Schema::hasColumn('clients', 'user_id')) {
+            Schema::table('clients', function (Blueprint $table) {
+                $table->foreignId('user_id')->nullable()->after('id')->constrained()->onDelete('cascade');
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('clients', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropColumn('user_id');
-        });
+        if (Schema::hasColumn('clients', 'user_id')) {
+            Schema::table('clients', function (Blueprint $table) {
+                $table->dropForeign(['user_id']);
+                $table->dropColumn('user_id');
+            });
+        }
     }
 };
