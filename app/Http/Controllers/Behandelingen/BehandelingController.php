@@ -19,6 +19,7 @@ class BehandelingController extends Controller
     {
         $zoekterm = trim((string) $request->query('zoek'));
         $type = trim((string) $request->query('type'));
+        $sortering = (string) $request->query('sorteer', 'meest_populair');
 
         // Deze types worden gebruikt voor de filter dropdown.
         $types = Behandeling::query()
@@ -28,7 +29,7 @@ class BehandelingController extends Controller
             ->pluck('type');
 
         // Hier worden zoekterm en type-filter toegepast op de lijst.
-        $behandelingen = Behandeling::query()
+        $query = Behandeling::query()
             ->when($zoekterm !== '', function ($query) use ($zoekterm) {
                 $query->where(function ($query) use ($zoekterm) {
                     $query->where('naam', 'like', "%{$zoekterm}%")
@@ -36,8 +37,15 @@ class BehandelingController extends Controller
                         ->orWhere('beschrijving', 'like', "%{$zoekterm}%");
                 });
             })
-            ->when($type !== '', fn ($query) => $query->where('type', $type))
-            ->latest()
+            ->when($type !== '', fn ($query) => $query->where('type', $type));
+
+        match ($sortering) {
+            'naam_az' => $query->orderBy('naam'),
+            'prijs_laag_hoog' => $query->orderBy('prijs')->orderBy('naam'),
+            default => $query->latest(),
+        };
+
+        $behandelingen = $query
             ->paginate(10)
             ->withQueryString();
 
@@ -46,6 +54,7 @@ class BehandelingController extends Controller
             'types' => $types,
             'zoekterm' => $zoekterm,
             'geselecteerdType' => $type,
+            'geselecteerdeSortering' => $sortering,
         ]);
     }
 

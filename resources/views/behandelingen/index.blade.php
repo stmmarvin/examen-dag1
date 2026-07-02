@@ -23,7 +23,7 @@
     @endif
 
     {{-- Zoek en filter formulier. --}}
-    <form method="GET" action="{{ route('behandelingen.index') }}" class="mt-8 grid gap-5 lg:grid-cols-[1.4fr_1fr_1fr_auto]">
+    <form id="behandelingen-filter-form" method="GET" action="{{ route('behandelingen.index') }}" class="mt-8 grid gap-5 lg:grid-cols-[1.4fr_1fr_1fr_auto]">
         <label class="relative block">
             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-[#0f1f3a]">Zoek</span>
             <input name="zoek" type="search" value="{{ $zoekterm }}" placeholder="Zoek een behandeling..." class="h-12 w-full rounded border-slate-300 pl-16 text-sm focus:border-[#0f1f3a] focus:ring-[#0f1f3a]">
@@ -37,9 +37,9 @@
         </select>
 
         <select name="sorteer" class="h-12 w-full rounded border-slate-300 text-sm focus:border-[#0f1f3a] focus:ring-[#0f1f3a]">
-            <option>Meest populair</option>
-            <option>Naam A-Z</option>
-            <option>Prijs laag-hoog</option>
+            <option value="meest_populair" @selected($geselecteerdeSortering === 'meest_populair')>Meest populair</option>
+            <option value="naam_az" @selected($geselecteerdeSortering === 'naam_az')>Naam A-Z</option>
+            <option value="prijs_laag_hoog" @selected($geselecteerdeSortering === 'prijs_laag_hoog')>Prijs laag-hoog</option>
         </select>
 
         <div class="flex gap-3">
@@ -121,7 +121,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const formulier = document.querySelector('form[action="{{ route('behandelingen.index') }}"]');
+        const formulier = document.getElementById('behandelingen-filter-form');
         const zoekveld = formulier?.querySelector('input[name="zoek"]');
         const dropdowns = formulier?.querySelectorAll('select');
         let zoekTimer;
