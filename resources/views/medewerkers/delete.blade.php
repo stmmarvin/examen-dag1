@@ -2,7 +2,7 @@
     <div class="flex min-h-[calc(100vh-76px)]">
         @include('medewerkers.partials.sidebar', ['active' => 'delete'])
 
-        <section class="flex-1 px-10 py-9">
+        <section class="min-w-0 flex-1 px-10 py-9">
             @include('medewerkers.partials.flash')
 
             <a href="{{ route('medewerkers.index', ['medewerker' => $medewerker->id]) }}" class="text-sm">← Terug naar medewerkers</a>
@@ -15,11 +15,11 @@
             <div class="mt-6 max-w-[760px] rounded border border-gray-400 p-6">
                 <h2 class="text-2xl font-bold">Medewerkerdetails</h2>
 
-                <div class="mt-6 flex gap-6">
+                <div class="mt-6 flex min-w-0 gap-6">
                     <span class="h-20 w-20 shrink-0 rounded-full border border-black"></span>
-                    <div>
-                        <h3 class="text-2xl font-bold">{{ $medewerker->gebruiker->volledige_naam }}</h3>
-                        <p class="mt-3 text-sm">{{ $medewerker->gebruiker->telefoon }} · {{ $medewerker->gebruiker->email }}</p>
+                    <div class="min-w-0">
+                        <h3 class="break-words text-2xl font-bold">{{ $medewerker->gebruiker->volledige_naam }}</h3>
+                        <p class="mt-3 break-words text-sm">{{ $medewerker->gebruiker->telefoon }} · <span class="break-all">{{ $medewerker->gebruiker->email }}</span></p>
                         <p class="mt-4 text-sm">
                             In dienst sinds:
                             {{ optional($medewerker->in_dienst_sinds)->translatedFormat('d F Y') ?? 'Onbekend' }}
@@ -27,15 +27,15 @@
                     </div>
                 </div>
 
-                <dl class="mt-8 grid grid-cols-[160px_1fr] gap-y-3 text-sm">
+                <dl class="mt-8 grid grid-cols-[140px_minmax(0,1fr)] gap-x-4 gap-y-3 text-sm">
                     <dt class="font-bold">Functie</dt>
-                    <dd>{{ $medewerker->functie }}</dd>
+                    <dd class="min-w-0 break-words">{{ $medewerker->functie }}</dd>
                     <dt class="font-bold">Status</dt>
-                    <dd>{{ $medewerker->statusTekst() }}</dd>
+                    <dd class="min-w-0 break-words">{{ $medewerker->statusTekst() }}</dd>
                     <dt class="font-bold">Specialisatie</dt>
-                    <dd>{{ $medewerker->specialisatiesTekst() ?: 'Geen' }}</dd>
+                    <dd class="min-w-0 break-words">{{ $medewerker->specialisatiesTekst() ?: 'Geen' }}</dd>
                     <dt class="font-bold">Toekomstige afspraken</dt>
-                    <dd>{{ $toekomstigeAfspraken }}</dd>
+                    <dd class="min-w-0 break-words">{{ $toekomstigeAfspraken }}</dd>
                 </dl>
 
                 <div class="mt-7 flex gap-5 rounded border border-red-500 px-6 py-5 text-sm">
