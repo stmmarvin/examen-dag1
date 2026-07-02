@@ -7,8 +7,10 @@ use App\Http\Requests\UpdateKlantRequest;
 use App\Models\Gebruiker;
 use App\Models\Klant;
 use App\Models\KlantKenmerk;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class KlantController extends Controller
@@ -100,8 +102,26 @@ class KlantController extends Controller
                 ->route('klanten.index')
                 ->with('success', 'Klant succesvol aangemaakt');
 
+        } catch (QueryException $e) {
+            DB::rollBack();
+            
+            // Log the error details for debugging
+            Log::error('Failed to create klant: ' . $e->getMessage(), [
+                'request_data' => $request->except(['_token']),
+                'exception' => $e
+            ]);
+            
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Er is een fout opgetreden bij het aanmaken van de klant. Probeer het opnieuw.');
         } catch (\Exception $e) {
             DB::rollBack();
+            
+            // Log unexpected errors
+            Log::error('Unexpected error creating klant: ' . $e->getMessage(), [
+                'exception' => $e
+            ]);
             
             return redirect()
                 ->back()
@@ -147,9 +167,9 @@ class KlantController extends Controller
      */
     public function update(UpdateKlantRequest $request, Klant $klant): RedirectResponse
     {
-        DB::beginTransaction();
-
         try {
+            DB::beginTransaction();
+
             // Update gebruiker record with validated data
             $klant->gebruiker->update([
                 'voornaam' => $request->voornaam,
@@ -207,11 +227,28 @@ class KlantController extends Controller
                 ->route('klanten.show', $klant)
                 ->with('success', 'Klantgegevens succesvol bijgewerkt');
 
+        } catch (QueryException $e) {
+            DB::rollBack();
+            
+            // Log the error details for debugging
+            Log::error('Failed to update klant: ' . $e->getMessage(), [
+                'klant_id' => $klant->id,
+                'request_data' => $request->except(['_token']),
+                'exception' => $e
+            ]);
+            
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Er is een fout opgetreden bij het bijwerken van de klantgegevens.');
         } catch (\Exception $e) {
             DB::rollBack();
             
-            // Log the error and redirect back with error message
-            \Log::error('Failed to update klant: ' . $e->getMessage());
+            // Log unexpected errors
+            Log::error('Unexpected error updating klant: ' . $e->getMessage(), [
+                'klant_id' => $klant->id,
+                'exception' => $e
+            ]);
             
             return redirect()
                 ->back()
@@ -230,11 +267,24 @@ class KlantController extends Controller
      */
     public function destroy(Klant $klant): RedirectResponse
     {
-        // Delete the klant from database (cascade will delete gebruiker)
-        $klant->delete();
+        try {
+            // Delete the klant from database (cascade will delete gebruiker)
+            $klant->delete();
 
-        // Redirect to index with success message
-        return redirect()->route('klanten.index')
-            ->with('success', 'Klant succesvol verwijderd');
+            // Redirect to index with success message
+            return redirect()->route('klanten.index')
+                ->with('success', 'Klant succesvol verwijderd');
+
+        } catch (QueryException $e) {
+            // Log the error details for debugging
+            Log::error('Failed to delete klant: ' . $e->getMessage(), [
+                'klant_id' => $klant->id,
+                'exception' => $e
+            ]);
+            
+            // Return with generic error message for user
+            return redirect()->route('klanten.index')
+                ->with('error', 'Er is een fout opgetreden bij het verwijderen van de klant. Probeer het opnieuw.');
+        }
     }
 }
