@@ -11,12 +11,20 @@
             <a href="#" class="hover:text-[#c69a3e]">Contact</a>
         </nav>
 
-        <div class="flex items-center gap-3 text-sm font-semibold text-[#0f1f3a]">
-            <span class="flex h-9 w-9 items-center justify-center rounded-full border border-[#0f1f3a] bg-[#f8f4ea]">
-                <span class="h-2 w-2 rounded-full bg-[#c69a3e]"></span>
-            </span>
-            <span>Mijn account</span>
-            <span class="text-lg leading-none">v</span>
-        </div>
+        @auth
+            <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 text-sm font-semibold text-[#0f1f3a] hover:text-[#c69a3e]">
+                <span class="flex h-9 w-9 items-center justify-center rounded-full border border-[#0f1f3a] bg-[#f8f4ea]">
+                    <span class="h-2 w-2 rounded-full bg-[#c69a3e]"></span>
+                </span>
+                <span>{{ Auth::user()->name }}</span>
+            </a>
+        @else
+            <a href="{{ route('login') }}" class="flex items-center gap-3 text-sm font-semibold text-[#0f1f3a] hover:text-[#c69a3e]">
+                <span class="flex h-9 w-9 items-center justify-center rounded-full border border-[#0f1f3a] bg-[#f8f4ea]">
+                    <span class="h-2 w-2 rounded-full bg-[#c69a3e]"></span>
+                </span>
+                <span>Inloggen</span>
+            </a>
+        @endauth
     </div>
 </header>
