@@ -17,6 +17,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
+    // Klant Profiel routes
+    Route::get('/profiel', [\App\Http\Controllers\KlantProfielController::class, 'index'])->name('profiel.index');
+    Route::get('/profiel/bewerken', [\App\Http\Controllers\KlantProfielController::class, 'edit'])->name('profiel.edit');
+    Route::patch('/profiel', [\App\Http\Controllers\KlantProfielController::class, 'update'])->name('profiel.update');
+    Route::delete('/profiel', [\App\Http\Controllers\KlantProfielController::class, 'destroy'])->name('profiel.destroy');
+    Route::post('/profiel/delete-confirm', [\App\Http\Controllers\KlantProfielController::class, 'deleteConfirm'])->name('profiel.delete-confirm');
+    
     // Appointment routes - Main pages
     Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
     Route::get('/appointments/manage', [AppointmentController::class, 'manage'])->name('appointments.manage');
@@ -36,3 +43,4 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+require __DIR__.'/behandelingen.php';

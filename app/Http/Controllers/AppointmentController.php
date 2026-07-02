@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\Client;
 use App\Models\Employee;
-use App\Models\Treatment;
+use App\Models\Behandelingen\Behandeling;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
@@ -65,16 +66,19 @@ class AppointmentController extends Controller
 
     public function createAsClient()
     {
-        $employees = Employee::orderBy('name')->get();
-        $treatments = Treatment::orderBy('name')->get();
+        // Get employees from users table with role 'medewerker' 
+        $employees = User::where('rolename', 'medewerker')->orderBy('name')->get();
+        
+        // Get behandelingen instead of treatments
+        $treatments = Behandeling::where('actief', true)->orderBy('naam')->get();
         
         // Get or create client for logged in user
         $client = Client::firstOrCreate(
             ['user_id' => auth()->id()],
             [
-                'first_name' => auth()->user()->name,
-                'last_name' => '',
-                'phone' => auth()->user()->email,
+                'first_name' => auth()->user()->voornaam ?? auth()->user()->name,
+                'last_name' => auth()->user()->achternaam ?? '',
+                'phone' => auth()->user()->telefoon ?? auth()->user()->email,
                 'email' => auth()->user()->email,
             ]
         );

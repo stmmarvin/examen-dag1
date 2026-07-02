@@ -1,128 +1,137 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center">
-            <a href="{{ route('dashboard') }}" class="mr-4 text-gray-600 hover:text-gray-900">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                </svg>
-            </a>
-            <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-                Afspraak maken
-            </h2>
-        </div>
-    </x-slot>
+@include('behandelingen.partials.page-start')
 
-    <div class="py-8">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            <p class="text-gray-600 mb-6">Maak een nieuwe afspraak als klant.</p>
-
-            @if(session('success'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            @if(session('error'))
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                    {{ session('error') }}
-                </div>
-            @endif
-
-            <div class="bg-white shadow-sm rounded-lg p-6">
-                <form method="POST" action="{{ route('appointments.store') }}">
-                    @csrf
-
-                    <div class="space-y-6">
-                        <!-- Employee Selection -->
-                        <div>
-                            <label for="employee_id" class="block text-sm font-medium text-gray-700 mb-2">
-                                Kies een medewerker
-                            </label>
-                            <select name="employee_id" id="employee_id" required class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                <option value="">Selecteer een medewerker...</option>
-                                @foreach($employees as $employee)
-                                    <option value="{{ $employee->id }}">
-                                        {{ $employee->name }}{{ $employee->specialty ? ' - ' . $employee->specialty : '' }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <!-- Treatment Selection -->
-                        <div>
-                            <label for="treatment_id" class="block text-sm font-medium text-gray-700 mb-2">
-                                Kies een behandeling
-                            </label>
-                            <select name="treatment_id" id="treatment_id" required class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                <option value="">Selecteer een behandeling...</option>
-                                @foreach($treatments as $treatment)
-                                    <option value="{{ $treatment->id }}">
-                                        {{ $treatment->name }} - €{{ number_format($treatment->price, 2) }} ({{ $treatment->duration_minutes }} min)
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <!-- Date -->
-                        <div>
-                            <label for="appointment_date" class="block text-sm font-medium text-gray-700 mb-2">
-                                Kies een datum
-                            </label>
-                            <input type="date" name="appointment_date" id="appointment_date" required min="{{ date('Y-m-d') }}" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                        </div>
-
-                        <!-- Time -->
-                        <div>
-                            <label for="appointment_time" class="block text-sm font-medium text-gray-700 mb-2">
-                                Kies een tijd
-                            </label>
-                            <select name="appointment_time" id="appointment_time" required class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                <option value="">Selecteer een tijd...</option>
-                                @for($hour = 9; $hour < 18; $hour++)
-                                    @foreach(['00', '30'] as $minute)
-                                        @php $time = sprintf('%02d:%s', $hour, $minute); @endphp
-                                        <option value="{{ $time }}">{{ $time }}</option>
-                                    @endforeach
-                                @endfor
-                            </select>
-                        </div>
-
-                        <!-- Hidden client_id - automatically linked to logged in user -->
-                        <input type="hidden" name="client_id" value="{{ $client->id }}">
-
-                        <!-- Show user info -->
-                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                            <div class="flex items-center">
-                                <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <div>
-                                    <p class="text-sm font-medium" style="color: #1E293B;">Afspraak maken als:</p>
-                                    <p class="text-sm text-gray-600">{{ auth()->user()->name }} ({{ auth()->user()->email }})</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Notes -->
-                        <div>
-                            <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">
-                                Opmerkingen (optioneel)
-                            </label>
-                            <textarea name="notes" id="notes" rows="3" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Bijv. allergieën, voorkeuren..."></textarea>
-                        </div>
-
-                        <!-- Submit -->
-                        <div class="flex justify-end gap-3 pt-4">
-                            <a href="{{ route('dashboard') }}" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                                Annuleren
-                            </a>
-                            <button type="submit" class="px-6 py-2 bg-black hover:bg-gray-800 text-white font-semibold rounded-md">
-                                Afspraak maken
-                            </button>
-                        </div>
-                    </div>
-                </form>
+<main class="flex-1">
+    <section class="mx-auto w-full px-8 py-12" style="max-width: 1200px;">
+        <!-- Header with back button -->
+        <div class="mb-8 flex items-center justify-between border-b border-[#d7c39a] pb-6">
+            <div class="flex items-center gap-4">
+                <a href="{{ route('dashboard') }}" class="text-[#0f1f3a] hover:text-[#c69a3e]">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                </a>
+                <h2 class="text-3xl font-bold text-[#0f1f3a]">Afspraak maken</h2>
             </div>
         </div>
-    </div>
-</x-app-layout>
+
+        @if(session('success'))
+            <div class="mb-6 rounded-lg border-2 border-green-500 bg-green-50 px-6 py-4 text-green-800">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="mb-6 rounded-lg border-2 border-red-500 bg-red-50 px-6 py-4 text-red-800">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        <!-- Form Card -->
+        <div class="rounded-lg border border-[#d7c39a] bg-white p-8 shadow-lg">
+            <form method="POST" action="{{ route('appointments.store') }}">
+                @csrf
+
+                <div class="space-y-6">
+                    <!-- Employee Selection -->
+                    <div>
+                        <label for="employee_id" class="mb-2 block text-sm font-semibold text-[#0f1f3a]">
+                            Kies een medewerker <span class="text-red-500">*</span>
+                        </label>
+                        <select name="employee_id" id="employee_id" required 
+                                class="w-full rounded-md border-2 border-[#d7c39a] px-4 py-3 focus:border-[#c69a3e] focus:outline-none">
+                            <option value="">Selecteer een medewerker...</option>
+                            @foreach($employees as $employee)
+                                <option value="{{ $employee->id }}">
+                                    {{ $employee->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Treatment Selection -->
+                    <div>
+                        <label for="treatment_id" class="mb-2 block text-sm font-semibold text-[#0f1f3a]">
+                            Kies een behandeling <span class="text-red-500">*</span>
+                        </label>
+                        <select name="treatment_id" id="treatment_id" required 
+                                class="w-full rounded-md border-2 border-[#d7c39a] px-4 py-3 focus:border-[#c69a3e] focus:outline-none">
+                            <option value="">Selecteer een behandeling...</option>
+                            @foreach($treatments as $treatment)
+                                <option value="{{ $treatment->id }}">
+                                    {{ $treatment->naam }} - €{{ number_format($treatment->prijs, 2) }} ({{ $treatment->duur_minuten }} min)
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Date -->
+                    <div>
+                        <label for="appointment_date" class="mb-2 block text-sm font-semibold text-[#0f1f3a]">
+                            Kies een datum <span class="text-red-500">*</span>
+                        </label>
+                        <input type="date" name="appointment_date" id="appointment_date" required min="{{ date('Y-m-d') }}" 
+                               class="w-full rounded-md border-2 border-[#d7c39a] px-4 py-3 focus:border-[#c69a3e] focus:outline-none">
+                    </div>
+
+                    <!-- Time -->
+                    <div>
+                        <label for="appointment_time" class="mb-2 block text-sm font-semibold text-[#0f1f3a]">
+                            Kies een tijd <span class="text-red-500">*</span>
+                        </label>
+                        <select name="appointment_time" id="appointment_time" required 
+                                class="w-full rounded-md border-2 border-[#d7c39a] px-4 py-3 focus:border-[#c69a3e] focus:outline-none">
+                            <option value="">Selecteer een tijd...</option>
+                            @for($hour = 9; $hour < 18; $hour++)
+                                @foreach(['00', '30'] as $minute)
+                                    @php $time = sprintf('%02d:%s', $hour, $minute); @endphp
+                                    <option value="{{ $time }}">{{ $time }}</option>
+                                @endforeach
+                            @endfor
+                        </select>
+                    </div>
+
+                    <!-- Hidden client_id -->
+                    <input type="hidden" name="client_id" value="{{ $client->id }}">
+
+                    <!-- User info -->
+                    <div class="rounded-lg border-2 border-[#c69a3e] bg-[#f8f4ea] p-4">
+                        <div class="flex items-center">
+                            <svg class="mr-2 h-5 w-5 text-[#c69a3e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <div>
+                                <p class="text-sm font-semibold text-[#0f1f3a]">Afspraak maken als:</p>
+                                <p class="text-sm text-[#0f1f3a]">{{ auth()->user()->name }} ({{ auth()->user()->email }})</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div>
+                        <label for="notes" class="mb-2 block text-sm font-semibold text-[#0f1f3a]">
+                            Opmerkingen (optioneel)
+                        </label>
+                        <textarea name="notes" id="notes" rows="5" 
+                                  placeholder="Bijv. extra opmerkingen..."
+                                  class="w-full rounded-md border-2 border-[#d7c39a] px-4 py-3 focus:border-[#c69a3e] focus:outline-none">{{ auth()->user()->allergieen ? 'Allergieën: ' . auth()->user()->allergieen . "\n" : '' }}{{ auth()->user()->wensen ? 'Wensen: ' . auth()->user()->wensen : '' }}</textarea>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex items-center justify-between border-t border-[#d7c39a] pt-6">
+                        <a href="{{ route('dashboard') }}" 
+                           class="rounded-md border-2 border-[#d7c39a] px-6 py-3 text-sm font-bold text-[#0f1f3a] transition hover:bg-[#f8f4ea]">
+                            Annuleren
+                        </a>
+                        <button type="submit" 
+                                class="rounded-md px-8 py-4 text-sm font-bold text-white shadow-lg transition hover:shadow-xl" 
+                                style="background: #c69a3e;">
+                            Afspraak maken
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+
+@include('behandelingen.partials.page-end')
