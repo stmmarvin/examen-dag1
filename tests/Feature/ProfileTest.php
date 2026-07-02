@@ -61,7 +61,7 @@ class ProfileTest extends TestCase
         $this->assertNotNull($user->refresh()->email_verified_at);
     }
 
-    public function test_user_can_delete_their_account(): void
+    public function test_user_cannot_delete_their_account(): void
     {
         $user = User::factory()->create();
 
@@ -73,13 +73,14 @@ class ProfileTest extends TestCase
 
         $response
             ->assertSessionHasNoErrors()
-            ->assertRedirect('/');
+            ->assertSessionHas('error', 'Het eigenaaraccount kan niet worden verwijderd.')
+            ->assertRedirect('/profile');
 
-        $this->assertGuest();
-        $this->assertNull($user->fresh());
+        $this->assertAuthenticated();
+        $this->assertNotNull($user->fresh());
     }
 
-    public function test_correct_password_must_be_provided_to_delete_account(): void
+    public function test_delete_account_route_keeps_user_with_wrong_password_too(): void
     {
         $user = User::factory()->create();
 
@@ -91,9 +92,10 @@ class ProfileTest extends TestCase
             ]);
 
         $response
-            ->assertSessionHasErrorsIn('userDeletion', 'password')
+            ->assertSessionHas('error', 'Het eigenaaraccount kan niet worden verwijderd.')
             ->assertRedirect('/profile');
 
+        $this->assertAuthenticated();
         $this->assertNotNull($user->fresh());
     }
 }
