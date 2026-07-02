@@ -238,55 +238,90 @@ CREATE TABLE afspraak_behandeling (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO rollen (naam, omschrijving) VALUES
+('eigenaar', 'Kan medewerkers beheren'),
 ('medewerker', 'Kan klanten, afspraken en behandelingen beheren'),
-('klant', 'Kan afspraken bekijken en beheren');
+('klant', 'Kan afspraken bekijken en beheren'),
+('planner', 'Kan afspraken plannen en wijzigen'),
+('beheerder', 'Kan technische instellingen beheren');
 
 INSERT INTO gebruikers (
     rol_id, voornaam, achternaam, email, telefoon, wachtwoord, actief
 ) VALUES
-(1, 'Admin', 'Gebruiker', 'admin@localhost.test', '0611111111', '$2y$12$voorbeeldhashhier', 1),
-(2, 'Test', 'Klant', 'klant@localhost.test', '0622222222', '$2y$12$voorbeeldhashhier', 1);
+(1, 'Lisa', 'Jansen', 'lisa@kniplokettiko.nl', '06 12345678', '$2y$12$voorbeeldhashhier', 1),
+(2, 'Laura', 'Jansen', 'laura@kniplokettiko.nl', '06 23456789', '$2y$12$voorbeeldhashhier', 1),
+(2, 'Mark', 'van Dijk', 'mark@kniplokettiko.nl', '06 34567890', '$2y$12$voorbeeldhashhier', 1),
+(2, 'Emma', 'Bakker', 'emma@kniplokettiko.nl', '06 45678901', '$2y$12$voorbeeldhashhier', 1),
+(2, 'Tom', 'Meijer', 'tom@kniplokettiko.nl', '06 56789012', '$2y$12$voorbeeldhashhier', 1),
+(3, 'Sanne', 'de Vries', 'sanne@example.test', '06 67890123', '$2y$12$voorbeeldhashhier', 1),
+(3, 'Nora', 'Peters', 'nora@example.test', '06 78901234', '$2y$12$voorbeeldhashhier', 1),
+(3, 'Mila', 'Vos', 'mila@example.test', '06 89012345', '$2y$12$voorbeeldhashhier', 1),
+(3, 'Daan', 'Smit', 'daan@example.test', '06 90123456', '$2y$12$voorbeeldhashhier', 1),
+(3, 'Yara', 'Mulder', 'yara@example.test', '06 01234567', '$2y$12$voorbeeldhashhier', 1);
 
 INSERT INTO medewerkers (
     gebruiker_id, personeelsnummer, functie, in_dienst_sinds, werkdagen, werktijden
 ) VALUES
-(1, 'MW-001', 'Behandelaar', '2025-01-01', 'Maandag t/m vrijdag', '09:00 - 17:00');
+(1, 'MW-001', 'Manager', '2021-01-10', 'Maandag t/m vrijdag', '09:00 - 17:00'),
+(2, 'MW-002', 'Kapster', '2022-03-01', 'Maandag t/m donderdag', '09:00 - 17:00'),
+(3, 'MW-003', 'Colorist', '2023-04-15', 'Dinsdag t/m zaterdag', '10:00 - 18:00'),
+(4, 'MW-004', 'Stylist', '2024-02-20', 'Maandag, woensdag, vrijdag', '09:00 - 16:00'),
+(5, 'MW-005', 'Extensions specialist', '2024-09-01', 'Woensdag t/m zaterdag', '10:00 - 18:00');
 
 INSERT INTO klanten (
     gebruiker_id, geboortedatum, adresregel1, postcode, plaats, land, algemene_notities
 ) VALUES
-(2, '1998-06-15', 'Voorbeeldstraat 1', '1234AB', 'Amsterdam', 'Nederland', 'Voorbeeld klant');
+(6, '1998-06-15', 'Voorbeeldstraat 1', '1234AB', 'Utrecht', 'Nederland', 'Parfumvrij werken'),
+(7, '1989-11-03', 'Kapsalonlaan 7', '3521CD', 'Utrecht', 'Nederland', 'Komt graag in de ochtend'),
+(8, '2001-02-21', 'Knipstraat 12', '3512EF', 'Nieuwegein', 'Nederland', 'Studentenkorting'),
+(9, '1977-08-09', 'Kleurplein 4', '3581GH', 'Zeist', 'Nederland', 'Gevoelige hoofdhuid'),
+(10, '1995-12-30', 'Stylinghof 22', '3701JK', 'Houten', 'Nederland', 'Wil vaste stylist');
 
 INSERT INTO producten (
     naam, sku, beschrijving, voorraad_aantal, eenheid, kostprijs, verkoopprijs, actief
 ) VALUES
-('Massage Olie', 'PRD-001', 'Basis massage olie', 25, 'ml', 4.50, 9.95, 1),
-('Huidcrème', 'PRD-002', 'Verzorgende crème', 40, 'ml', 3.50, 8.95, 1);
+('Shampoo Hydrate', 'PRD-001', 'Hydraterende shampoo', 25, 'fles', 4.50, 9.95, 1),
+('Kleurcreme Bruin', 'PRD-002', 'Professionele kleurcreme', 40, 'tube', 5.75, 14.95, 1),
+('Styling Mousse', 'PRD-003', 'Mousse voor volume', 18, 'bus', 3.20, 8.95, 1),
+('Extensions Tape', 'PRD-004', 'Tape voor extensions', 12, 'set', 9.50, 19.95, 1),
+('Heat Protect Spray', 'PRD-005', 'Bescherming bij styling', 30, 'fles', 4.10, 10.95, 1);
 
 INSERT INTO behandelingen (
     naam, type, beschrijving, duur_minuten, prijs, actief
 ) VALUES
-('Basis Gezichtsbehandeling', 'Gezicht', 'Standaard behandeling voor gezicht', 60, 49.95, 1),
-('Rugmassage', 'Massage', 'Ontspannende rugmassage', 45, 39.95, 1);
+('Knippen', 'Haar', 'Knippen en afwerken', 45, 32.50, 1),
+('Kleuren', 'Haar', 'Volledige kleurbehandeling', 90, 68.00, 1),
+('Styling', 'Haar', 'Stylen en fohnen', 40, 29.95, 1),
+('Extensions', 'Haar', 'Extensions plaatsen', 120, 110.00, 1),
+('Basic Gezichtsbehandeling', 'Gezicht', 'Basis gezichtsbehandeling', 45, 45.00, 1);
 
 INSERT INTO medewerker_behandeling (
     medewerker_id,
     behandeling_id
 ) VALUES
 (1, 1),
-(1, 2);
+(1, 2),
+(2, 1),
+(3, 2),
+(4, 3),
+(5, 4);
 
 INSERT INTO behandeling_product (
     behandeling_id, product_id, hoeveelheid
 ) VALUES
-(1, 2, 1.00),
-(2, 1, 2.00);
+(1, 1, 1.00),
+(2, 2, 1.50),
+(3, 3, 1.00),
+(4, 4, 2.00),
+(5, 5, 1.00);
 
 INSERT INTO klant_kenmerken (
     klant_id, type, titel, beschrijving, actief
 ) VALUES
 (1, 'allergie', 'Parfum', 'Klant reageert op sterk geparfumeerde producten', 1),
-(1, 'wens', 'Rustige behandeling', 'Klant wil een rustige behandelruimte', 1);
+(2, 'voorkeur', 'Ochtend', 'Boekt graag voor 11:00', 1),
+(3, 'wens', 'Rustige plek', 'Wil rustige behandelplek', 1),
+(4, 'medisch', 'Gevoelige huid', 'Voorzichtig met kleurproducten', 1),
+(5, 'voorkeur', 'Vaste stylist', 'Boekt het liefst bij Emma', 1);
 
 INSERT INTO afspraken (
     klant_id,
@@ -299,17 +334,11 @@ INSERT INTO afspraken (
     totaalprijs,
     aangemaakt_door_gebruiker_id
 ) VALUES
-(
-    1,
-    1,
-    '2025-10-13 10:00:00',
-    '2025-10-13 11:00:00',
-    'gepland',
-    'Eerste afspraak',
-    'Gebruik parfumvrije producten',
-    49.95,
-    2
-);
+(1, 1, '2026-07-08 10:00:00', '2026-07-08 11:00:00', 'gepland', 'Eerste afspraak', 'Gebruik parfumvrije producten', 32.50, 6),
+(2, 2, '2026-07-09 09:30:00', '2026-07-09 10:15:00', 'bevestigd', 'Punten knippen', NULL, 32.50, 7),
+(3, 3, '2026-07-10 13:00:00', '2026-07-10 14:30:00', 'gepland', 'Uitgroei bijwerken', NULL, 68.00, 8),
+(4, 4, '2026-07-11 15:00:00', '2026-07-11 15:45:00', 'gepland', 'Styling voor feest', NULL, 29.95, 9),
+(5, 5, '2026-07-12 12:00:00', '2026-07-12 14:00:00', 'gepland', 'Extensions intake', NULL, 110.00, 10);
 
 INSERT INTO afspraak_behandeling (
     afspraak_id,
@@ -319,11 +348,8 @@ INSERT INTO afspraak_behandeling (
     notitie,
     uitgevoerd
 ) VALUES
-(
-    1,
-    1,
-    49.95,
-    60,
-    'Standaard intake',
-    0
-);
+(1, 1, 32.50, 45, 'Knippen basis', 0),
+(2, 1, 32.50, 45, 'Punten knippen', 0),
+(3, 2, 68.00, 90, 'Uitgroei bijwerken', 0),
+(4, 3, 29.95, 40, 'Styling feest', 0),
+(5, 4, 110.00, 120, 'Extensions intake', 0);
