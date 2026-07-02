@@ -5,11 +5,17 @@
         <section class="flex-1 px-10 py-9">
             @include('medewerkers.partials.flash')
 
+            @php
+                $isEigenaarAccount = strtolower((string) $medewerker->gebruiker->email) === 'eigenaar@kniplokettiko.nl';
+            @endphp
+
             <div class="flex items-start justify-between">
                 <a href="{{ route('medewerkers.index', ['medewerker' => $medewerker->id]) }}" class="text-sm">← Terug naar medewerkers</a>
-                <a href="{{ route('medewerkers.delete', $medewerker) }}" class="rounded border border-gray-400 px-6 py-3 text-sm font-bold text-red-600">
-                    Medewerker verwijderen
-                </a>
+                @unless ($isEigenaarAccount)
+                    <a href="{{ route('medewerkers.delete', $medewerker) }}" class="rounded border border-gray-400 px-6 py-3 text-sm font-bold text-red-600">
+                        Medewerker verwijderen
+                    </a>
+                @endunless
             </div>
 
             <div class="mt-20">

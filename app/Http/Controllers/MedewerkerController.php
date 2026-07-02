@@ -131,9 +131,15 @@ class MedewerkerController extends Controller
     /**
      * Toon het verwijder-scherm uit het wireframe.
      */
-    public function delete(Medewerker $medewerker): View
+    public function delete(Medewerker $medewerker): View|RedirectResponse
     {
         $medewerker->load(['gebruiker', 'behandelingen']);
+
+        if ($this->isEigenaarAccount($medewerker)) {
+            return redirect()
+                ->route('medewerkers.index', ['medewerker' => $medewerker->id])
+                ->with('error', 'Het eigenaaraccount kan niet worden verwijderd.');
+        }
 
         return view('medewerkers.delete', [
             'medewerker' => $medewerker,
@@ -148,6 +154,14 @@ class MedewerkerController extends Controller
      */
     public function destroy(Medewerker $medewerker): RedirectResponse
     {
+        $medewerker->loadMissing('gebruiker');
+
+        if ($this->isEigenaarAccount($medewerker)) {
+            return redirect()
+                ->route('medewerkers.index', ['medewerker' => $medewerker->id])
+                ->with('error', 'Het eigenaaraccount kan niet worden verwijderd.');
+        }
+
         if ($medewerker->hasFutureAppointments()) {
             return back()->with(
                 'error',
@@ -232,6 +246,14 @@ class MedewerkerController extends Controller
         );
 
         return (int) DB::table('rollen')->where('naam', 'eigenaar')->value('id');
+    }
+
+    /**
+     * Het vaste eigenaar-loginaccount mag nooit via medewerkerbeheer verdwijnen.
+     */
+    private function isEigenaarAccount(Medewerker $medewerker): bool
+    {
+        return strtolower((string) $medewerker->gebruiker?->email) === 'eigenaar@kniplokettiko.nl';
     }
 
     /**

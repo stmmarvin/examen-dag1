@@ -41,6 +41,10 @@
 
                 <div class="min-w-0 px-6 py-6">
                     @if ($geselecteerdeMedewerker)
+                        @php
+                            $isEigenaarAccount = strtolower((string) $geselecteerdeMedewerker->gebruiker->email) === 'eigenaar@kniplokettiko.nl';
+                        @endphp
+
                         <div class="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
                             <div class="flex min-w-0 gap-6">
                                 <span class="h-20 w-20 rounded-full border border-black"></span>
@@ -60,9 +64,11 @@
                                 <a href="{{ route('medewerkers.edit', $geselecteerdeMedewerker) }}" class="rounded border border-gray-400 px-10 py-3 text-sm font-bold">
                                     Wijzigen
                                 </a>
-                                <a href="{{ route('medewerkers.delete', $geselecteerdeMedewerker) }}" class="rounded border border-gray-400 px-8 py-3 text-sm font-bold text-red-600">
-                                    Verwijderen
-                                </a>
+                                @unless ($isEigenaarAccount)
+                                    <a href="{{ route('medewerkers.delete', $geselecteerdeMedewerker) }}" class="rounded border border-gray-400 px-8 py-3 text-sm font-bold text-red-600">
+                                        Verwijderen
+                                    </a>
+                                @endunless
                             </div>
                         </div>
 
