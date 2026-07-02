@@ -1,7 +1,7 @@
 <nav class="border-b border-gray-400 bg-white">
     <div class="flex h-[76px] items-center justify-between px-7">
         <div class="flex items-center gap-4">
-            <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
+            <a href="{{ route('medewerkers.index') }}" class="flex items-center gap-3">
                 <img src="{{ asset('images/kniploket-tiko-logo.png') }}" alt="Kniploket Tiko" class="h-14 w-14 object-contain">
                 <span class="text-2xl font-bold">
                     <span class="text-[#10213D]">knip</span><span class="text-[#C6983C]">loket</span>
@@ -11,16 +11,9 @@
         </div>
 
         <div class="hidden items-center gap-10 text-sm font-bold lg:flex">
-            <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'border-b-2 border-black pb-3' : 'pb-3' }}">
-                Overzicht
-            </a>
             <a href="{{ route('medewerkers.index') }}" class="{{ request()->routeIs('medewerkers.*') ? 'border-b-2 border-black pb-3' : 'pb-3' }}">
                 Medewerkers
             </a>
-            <span class="pb-3">Klanten</span>
-            <span class="pb-3">Afspraken</span>
-            <span class="pb-3">Agenda</span>
-            <span class="pb-3">Behandelingen</span>
         </div>
 
         <div class="flex items-center gap-3 text-sm font-bold">

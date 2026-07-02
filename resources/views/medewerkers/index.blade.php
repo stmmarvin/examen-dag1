@@ -66,12 +66,8 @@
                             </div>
                         </div>
 
-                        <div class="mt-8 border-y border-gray-400">
-                            <div class="flex gap-8 text-sm font-bold">
-                                <span class="border-b-2 border-black py-5">Overzicht</span>
-                                <span class="py-5">Specialisaties</span>
-                                <span class="py-5">Afspraken</span>
-                            </div>
+                        <div class="mt-8 border-y border-gray-400 py-5 text-sm font-bold">
+                            Overzicht
                         </div>
 
                         <div class="mt-5 grid grid-cols-1 gap-4 2xl:grid-cols-2">
