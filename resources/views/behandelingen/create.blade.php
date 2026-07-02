@@ -1,6 +1,6 @@
 @include('behandelingen.partials.page-start')
 
-<main class="flex-1 bg-gradient-to-b from-white via-[#fbfaf7] to-[#f8f4ea]">
+<main class="mx-auto w-full max-w-[1700px] flex-1">
     <section class="px-8 py-7">
         <a href="{{ route('behandelingen.index') }}" class="text-sm font-bold text-slate-950 hover:underline">Terug naar behandelingen overzicht</a>
         <h1 class="mt-4 text-3xl font-bold text-slate-950">Behandeling toevoegen</h1>

@@ -1,6 +1,6 @@
 @include('behandelingen.partials.page-start')
 
-<main class="flex-1 bg-gradient-to-b from-white via-[#fbfaf7] to-[#f8f4ea] px-8 py-8">
+<main class="mx-auto w-full max-w-[1700px] flex-1 px-8 py-8">
     <a href="{{ route('behandelingen.index') }}" class="text-sm font-bold text-slate-950 hover:underline">Terug naar behandelingen overzicht</a>
     <h1 class="mt-4 text-3xl font-bold text-slate-950">Behandeling verwijderen</h1>
     <p class="mt-2 text-sm text-slate-950">Weet je zeker dat je deze behandeling wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</p>

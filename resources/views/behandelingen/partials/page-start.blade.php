@@ -7,6 +7,6 @@
         <title>{{ config('app.name', 'Laravel') }} - Behandelingen</title>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="bg-[#f8f4ea] font-sans antialiased">
-        <div class="flex min-h-screen w-full flex-col overflow-hidden bg-[#f8f4ea]">
+    <body class="bg-[#f8f4ea] bg-no-repeat font-sans antialiased" style="background-image: url('{{ asset('images/behandelingen-background.svg') }}'); background-position: center top; background-size: 100% 100%;">
+        <div class="flex min-h-screen w-full flex-col overflow-hidden bg-transparent">
             @include('behandelingen.partials.header')

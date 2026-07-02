@@ -1,6 +1,6 @@
 @include('behandelingen.partials.page-start')
 
-<main class="flex-1 bg-gradient-to-b from-white via-[#fbfaf7] to-[#f8f4ea] px-8 py-8">
+<main class="mx-auto w-full max-w-[1700px] flex-1 px-8 py-8">
     <div class="flex items-start justify-between gap-6">
         <div>
             <p class="text-sm font-semibold uppercase tracking-widest text-[#c69a3e]">Kniploket Tiko</p>
