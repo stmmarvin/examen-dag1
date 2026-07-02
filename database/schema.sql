@@ -18,8 +18,44 @@ DROP TABLE IF EXISTS medewerker_behandeling;
 DROP TABLE IF EXISTS medewerkers;
 DROP TABLE IF EXISTS gebruikers;
 DROP TABLE IF EXISTS rollen;
+DROP TABLE IF EXISTS sessions;
+DROP TABLE IF EXISTS password_reset_tokens;
+DROP TABLE IF EXISTS users;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE users (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    email_verified_at TIMESTAMP NULL,
+    password VARCHAR(255) NOT NULL,
+    rolename VARCHAR(20) NOT NULL,
+    remember_token VARCHAR(100) NULL,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uk_users_email (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE password_reset_tokens (
+    email VARCHAR(255) NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NULL,
+    PRIMARY KEY (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE sessions (
+    id VARCHAR(255) NOT NULL,
+    user_id BIGINT UNSIGNED NULL,
+    ip_address VARCHAR(45) NULL,
+    user_agent TEXT NULL,
+    payload LONGTEXT NOT NULL,
+    last_activity INT NOT NULL,
+    PRIMARY KEY (id),
+    KEY idx_sessions_user_id (user_id),
+    KEY idx_sessions_last_activity (last_activity)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE rollen (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -207,6 +243,9 @@ CREATE TABLE afspraak_behandeling (
         ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO users (id, name, email, email_verified_at, password, rolename) VALUES
+(1, 'Eigenaar Kniploket Tiko', 'eigenaar@kniplokettiko.nl', NULL, '$2y$10$6Or/TQxYeRV0v3b7nDMOp.adoNyGykLbj5C9BFJqx9bjIIvCtzbxm', 'eigenaar');
+
 INSERT INTO rollen (id, naam, omschrijving) VALUES
 (1, 'eigenaar', 'Kan medewerkers en saloninstellingen beheren'),
 (2, 'klant', 'Kan eigen afspraken bekijken'),
@@ -224,14 +263,16 @@ INSERT INTO gebruikers (id, rol_id, voornaam, achternaam, email, telefoon, wacht
 (7, 2, 'Nora', 'Peters', 'nora@example.test', '06 78901234', '$2y$12$voorbeeldhashhier', 1),
 (8, 2, 'Mila', 'Vos', 'mila@example.test', '06 89012345', '$2y$12$voorbeeldhashhier', 1),
 (9, 2, 'Daan', 'Smit', 'daan@example.test', '06 90123456', '$2y$12$voorbeeldhashhier', 1),
-(10, 2, 'Yara', 'Mulder', 'yara@example.test', '06 01234567', '$2y$12$voorbeeldhashhier', 1);
+(10, 2, 'Yara', 'Mulder', 'yara@example.test', '06 01234567', '$2y$12$voorbeeldhashhier', 1),
+(11, 1, 'Marvin', 'Akpabot', 'eigenaar@kniplokettiko.nl', '06 456578674', '$2y$12$voorbeeldhashhier', 1);
 
 INSERT INTO medewerkers (id, gebruiker_id, personeelsnummer, functie, in_dienst_sinds, werkdagen, werktijden) VALUES
 (1, 1, 'MW-001', 'Manager', '2021-01-10', 'Maandag t/m vrijdag', '09:00 - 17:00'),
 (2, 2, 'MW-002', 'Kapster', '2022-03-01', 'Maandag t/m donderdag', '09:00 - 17:00'),
 (3, 3, 'MW-003', 'Colorist', '2023-04-15', 'Dinsdag t/m zaterdag', '10:00 - 18:00'),
 (4, 4, 'MW-004', 'Stylist', '2024-02-20', 'Maandag, woensdag, vrijdag', '09:00 - 16:00'),
-(5, 5, 'MW-005', 'Extensions specialist', '2024-09-01', 'Woensdag t/m zaterdag', '10:00 - 18:00');
+(5, 5, 'MW-005', 'Extensions specialist', '2024-09-01', 'Woensdag t/m zaterdag', '10:00 - 18:00'),
+(6, 11, 'MW-006', 'Stylist', '2026-07-01', 'Maandag t/m vrijdag', '09:00 - 17:00');
 
 INSERT INTO klanten (id, gebruiker_id, geboortedatum, adresregel1, postcode, plaats, land, algemene_notities) VALUES
 (1, 6, '1998-06-15', 'Voorbeeldstraat 1', '1234AB', 'Utrecht', 'Nederland', 'Parfumvrij werken'),
@@ -252,7 +293,8 @@ INSERT INTO behandelingen (id, naam, type, beschrijving, duur_minuten, prijs, ac
 (2, 'Kleuren', 'Haar', 'Volledige kleurbehandeling', 90, 68.00, 1),
 (3, 'Styling', 'Haar', 'Stylen en föhnen', 40, 29.95, 1),
 (4, 'Extensions', 'Haar', 'Extensions plaatsen', 120, 110.00, 1),
-(5, 'Wassen en drogen', 'Haar', 'Wassen en drogen', 30, 22.50, 1);
+(5, 'Wassen en drogen', 'Haar', 'Wassen en drogen', 30, 22.50, 1),
+(6, 'Basic Gezichtsbehandeling', 'Gezicht', 'Basis gezichtsbehandeling', 45, 45.00, 1);
 
 INSERT INTO behandeling_product (behandeling_id, product_id, hoeveelheid) VALUES
 (1, 1, 1.00),
@@ -267,7 +309,9 @@ INSERT INTO medewerker_behandeling (medewerker_id, behandeling_id) VALUES
 (2, 1),
 (3, 2),
 (4, 3),
-(5, 4);
+(5, 4),
+(6, 1),
+(6, 6);
 
 INSERT INTO klant_kenmerken (klant_id, type, titel, beschrijving, actief) VALUES
 (1, 'allergie', 'Parfum', 'Klant reageert op sterk geparfumeerde producten', 1),
@@ -299,13 +343,26 @@ BEGIN
         g.telefoon,
         g.email,
         m.functie,
+        m.in_dienst_sinds,
+        m.werkdagen,
+        m.werktijden,
         IF(g.actief = 1, 'In dienst', 'Uit dienst') AS status,
         GROUP_CONCAT(b.naam ORDER BY b.naam SEPARATOR ', ') AS specialisaties
     FROM medewerkers m
     INNER JOIN gebruikers g ON g.id = m.gebruiker_id
     LEFT JOIN medewerker_behandeling mb ON mb.medewerker_id = m.id
     LEFT JOIN behandelingen b ON b.id = mb.behandeling_id
-    GROUP BY m.id, g.voornaam, g.achternaam, g.telefoon, g.email, m.functie, g.actief;
+    GROUP BY
+        m.id,
+        g.voornaam,
+        g.achternaam,
+        g.telefoon,
+        g.email,
+        m.functie,
+        m.in_dienst_sinds,
+        m.werkdagen,
+        m.werktijden,
+        g.actief;
 END//
 
 CREATE PROCEDURE sp_medewerker_heeft_toekomstige_afspraken(IN p_medewerker_id BIGINT UNSIGNED)
