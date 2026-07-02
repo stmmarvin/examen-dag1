@@ -8,5 +8,5 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="bg-white font-sans antialiased">
-        <div class="min-h-screen w-full overflow-hidden bg-white">
+        <div class="flex min-h-screen w-full flex-col overflow-hidden bg-white">
             @include('behandelingen.partials.header')

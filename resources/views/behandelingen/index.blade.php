@@ -1,6 +1,6 @@
 @include('behandelingen.partials.page-start')
 
-<main class="bg-white px-8 py-7">
+<main class="flex-1 bg-white px-8 py-7">
     <div class="flex items-start justify-between gap-6">
         <div>
             <h1 class="text-3xl font-bold text-black">Behandelingen overzicht</h1>
