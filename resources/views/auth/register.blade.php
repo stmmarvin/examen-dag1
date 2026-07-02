@@ -80,8 +80,8 @@
                         <label for="telefoon" class="block text-sm font-semibold text-slate-900 mb-2">
                             Telefoonnummer
                         </label>
-                        <input id="telefoon" type="text" name="telefoon" value="{{ old('telefoon') }}" 
-                               placeholder="06 12345678"
+                        <input id="telefoon" type="tel" name="telefoon" value="{{ old('telefoon') }}" 
+                               placeholder="0612345678" pattern="(06|\+316)[0-9]{8}" title="Telefoonnummer moet beginnen met 06 gevolgd door 8 cijfers"
                                class="w-full px-4 py-3 border-2 border-slate-200 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-slate-900 transition">
                         @error('telefoon')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

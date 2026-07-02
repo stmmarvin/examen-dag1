@@ -87,8 +87,8 @@
                             <label for="telefoon" class="block text-sm font-medium text-gray-700 mb-2">
                                 Telefoon
                             </label>
-                            <input id="telefoon" type="text" name="telefoon" value="{{ old('telefoon', $user->telefoon) }}" 
-                                   placeholder="06 12345678"
+                            <input id="telefoon" type="tel" name="telefoon" value="{{ old('telefoon', $user->telefoon) }}" 
+                                   placeholder="0612345678" pattern="(06|\+316)[0-9]{8}" title="Telefoonnummer moet beginnen met 06 gevolgd door 8 cijfers"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
                             @error('telefoon')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -100,6 +100,7 @@
                                 Geboortedatum
                             </label>
                             <input id="geboortedatum" type="date" name="geboortedatum" value="{{ old('geboortedatum', $user->geboortedatum) }}" 
+                                   max="{{ date('Y-m-d') }}"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
                             @error('geboortedatum')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -130,7 +131,7 @@
                                 Postcode
                             </label>
                             <input id="postcode" type="text" name="postcode" value="{{ old('postcode', $user->postcode) }}" 
-                                   placeholder="1234AB"
+                                   placeholder="1234AB" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}" title="Postcode moet het Nederlandse formaat hebben (bijv. 1234AB)"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
                             @error('postcode')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
