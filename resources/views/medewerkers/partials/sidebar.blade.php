@@ -9,23 +9,11 @@
     </div>
 
     <nav class="mt-7 space-y-2 text-sm font-bold">
-        <!-- De menu-items volgen exact de vier CRUD-wireframes. -->
+        <!-- De sidebar blijft navigatie; acties staan bij de medewerker waar ze context hebben. -->
         <a href="{{ route('medewerkers.index') }}" class="flex items-center gap-5 rounded px-4 py-4 {{ $active === 'index' ? 'bg-gray-200' : '' }}">
             <span class="text-lg">⊙</span>
             <span>Alle medewerkers</span>
         </a>
-        <a href="{{ route('medewerkers.create') }}" class="flex items-center gap-5 rounded px-4 py-4 {{ $active === 'create' ? 'bg-gray-200' : '' }}">
-            <span class="text-xl">+</span>
-            <span>Nieuwe medewerker</span>
-        </a>
-        <span class="flex items-center gap-5 rounded px-4 py-4 {{ $active === 'edit' ? 'bg-gray-200' : '' }}">
-            <span class="text-lg">✎</span>
-            <span>Medewerker bewerken</span>
-        </span>
-        <span class="flex items-center gap-5 rounded px-4 py-4 {{ $active === 'delete' ? 'bg-gray-200' : '' }}">
-            <span class="text-lg">▱</span>
-            <span>Medewerker verwijderen</span>
-        </span>
     </nav>
 
     <div class="mt-auto rounded border border-gray-400 p-5 text-sm">
